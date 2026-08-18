@@ -105,6 +105,7 @@ npm run dev:mp-weixin
 ## 文档索引
 
 - [需求分析](docs/requirements/需求分析_V1.0.md)
+- [M1 任务分工](docs/development/M1任务分工.md)
 - [系统整体架构设计](docs/architecture/系统整体架构设计_V1.0.md)
 - [数据库设计](docs/database/数据库设计_V1.0.md)
 - [接口契约](docs/architecture/接口契约_V1.0.md)
