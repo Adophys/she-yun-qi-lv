@@ -72,12 +72,35 @@ npm run dev:mp-weixin
 - **凤凰拼图**：纹样拼图小游戏
 - **个人中心**：成就勋章、收藏、衣橱、设置、帮助反馈
 
+## 团队与协作
+
+- **GitHub 仓库**：`she-yun-qi-lv`
+- **协作者**：@web-demo-lab、@mute-sheep
+
+### 分支策略
+
+| 分支 | 用途 | 保护规则 |
+|---|---|---|
+| `main` | 生产就绪代码 | 禁止直推，需 PR + 1 review |
+| `develop` | 集成测试 | 允许直推 |
+| `feature/*` | 功能开发 | 命名如 `feature/scan-page` |
+| `fix/*` | Bug 修复 | 命名如 `fix/login-redirect` |
+
+### 分工建议
+
+| 成员 | 建议负责 |
+|---|---|
+| 小陈 (Adophys) | 后端 API + 数据库 + 部署 |
+| @web-demo-lab | 管理端 Vue 3 |
+| @mute-sheep | 小程序 uni-app |
+
 ## 协作规范
 
 1. 三个工程独立依赖、独立构建，通过 `docs/` 中的接口契约连接。
 2. 后端严格分层：`api → services → repositories → models/domain → db`。
 3. 小程序严格分层：`pages → stores/services → api → http → transport`。
 4. 提交前请阅读各子工程的 `README.md`。
+5. 提交信息格式：`type(scope): description`，如 `feat(scan): AR 扫描页面骨架`。
 
 ## 文档索引
 
