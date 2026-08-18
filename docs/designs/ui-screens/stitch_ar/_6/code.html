@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>登录 - 畲韵奇旅</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "jade-green": "#2A9D8F",
+                      "secondary-container": "#db313f",
+                      "surface-variant": "#e4e2de",
+                      "tertiary-fixed-dim": "#ffb780",
+                      "surface-container-lowest": "#ffffff",
+                      "secondary-fixed": "#ffdad8",
+                      "tertiary-fixed": "#ffdcc4",
+                      "primary-container": "#1a2b58",
+                      "surface-container-low": "#f5f3ef",
+                      "silver-metallic": "#C0C0C0",
+                      "inverse-surface": "#30312e",
+                      "surface": "#fbf9f5",
+                      "error-container": "#ffdad6",
+                      "on-secondary-fixed-variant": "#92001c",
+                      "primary": "#011543",
+                      "on-tertiary-fixed-variant": "#6f3800",
+                      "on-background": "#1b1c1a",
+                      "outline": "#757680",
+                      "surface-container-highest": "#e4e2de",
+                      "on-tertiary-container": "#cf8345",
+                      "on-error": "#ffffff",
+                      "inverse-on-surface": "#f2f0ed",
+                      "background": "#fbf9f5",
+                      "on-error-container": "#93000a",
+                      "on-tertiary": "#ffffff",
+                      "on-primary-container": "#8393c7",
+                      "on-primary-fixed-variant": "#354573",
+                      "primary-fixed-dim": "#b5c5fb",
+                      "outline-variant": "#c5c6d0",
+                      "on-primary-fixed": "#041845",
+                      "on-surface-variant": "#45464f",
+                      "on-primary": "#ffffff",
+                      "surface-dim": "#dbdad6",
+                      "inverse-primary": "#b5c5fb",
+                      "on-tertiary-fixed": "#2f1400",
+                      "indigo-wash": "#354A81",
+                      "surface-container": "#efeeea",
+                      "secondary-fixed-dim": "#ffb3b1",
+                      "surface-container-high": "#eae8e4",
+                      "surface-tint": "#4d5d8d",
+                      "on-secondary": "#ffffff",
+                      "tertiary": "#2b1200",
+                      "error": "#ba1a1a",
+                      "tertiary-container": "#4a2300",
+                      "on-secondary-container": "#fffbff",
+                      "surface-bright": "#fbf9f5",
+                      "primary-fixed": "#dbe1ff",
+                      "on-secondary-fixed": "#410007",
+                      "secondary": "#b7102a",
+                      "on-surface": "#1b1c1a"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "unit": "4px",
+                      "stack-md": "16px",
+                      "stack-lg": "32px",
+                      "margin-desktop": "24px",
+                      "margin-mobile": "16px",
+                      "stack-sm": "8px",
+                      "gutter": "12px"
+              },
+              "fontFamily": {
+                      "body-md": ["Plus Jakarta Sans"],
+                      "label-sm": ["Plus Jakarta Sans"],
+                      "label-md": ["Plus Jakarta Sans"],
+                      "headline-lg": ["Noto Serif"],
+                      "headline-lg-mobile": ["Noto Serif"],
+                      "display-lg": ["Noto Serif"],
+                      "body-lg": ["Plus Jakarta Sans"],
+                      "headline-md": ["Noto Serif"]
+              },
+              "fontSize": {
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "headline-lg": ["30px", {"lineHeight": "38px", "fontWeight": "700"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                      "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "headline-md": ["22px", {"lineHeight": "28px", "fontWeight": "600"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        /* Custom styles for tactile Guochao buttons */
+        .btn-guochao-primary {
+            position: relative;
+            overflow: hidden;
+            border-bottom: 4px solid rgba(0, 0, 0, 0.15);
+            transition: all 0.15s ease;
+        }
+        .btn-guochao-primary:active {
+            border-bottom-width: 0px;
+            transform: translateY(4px);
+        }
+        .btn-guochao-primary::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(255,255,255,0.05) 2px, rgba(255,255,255,0.05) 4px);
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        
+        .custom-checkbox:checked {
+            background-color: var(--color-primary);
+            border-color: var(--color-primary);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface antialiased selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- Linear/Transactional Page - Navigation Shell Suppressed -->
+<main class="relative min-h-screen flex flex-col items-center justify-between p-margin-mobile pt-24 pb-12 overflow-hidden">
+<!-- Background Pattern -->
+<div class="absolute inset-0 z-0 opacity-40 bg-cover bg-center pointer-events-none" data-alt="A highly subtle, elegant background texture inspired by traditional She ethnic woven fabrics. The pattern features delicate, geometric diamond and mountain motifs woven in faint, warm ivory and pale silver tones against a warm rice-white background. The lighting is soft and ambient, creating a high-tech yet culturally rich minimalist Modern Guochao aesthetic, perfect as an unobtrusive UI backdrop." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAsovFIS-7F-6xsvnPALEmyo2RHzmf9Akct0zH3EZBfKbHVbG-AlCRykvjFq0cBRSfR10jqjq3pbrTfp7MfJOa15VDzDfboKc_AZSTezyjtsYa8uiJnbVj-tnJHcuaG9dupzXsPdgYCojYq57ktPPfqxf8giLu7rEmM8-UMz9cVFendN0cKVDdf9s9vy26nNtBo5HOlNuchbEBerp4usdNo2rUX-MAYbRBG5u-FB7ishlBDUqSaiIzn')"></div>
+<!-- Top Section: Brand Identity -->
+<div class="z-10 flex flex-col items-center w-full max-w-sm mt-8">
+<!-- Glassmorphism Logo Container -->
+<div class="relative w-28 h-28 mb-stack-md rounded-full bg-surface-container-lowest/80 backdrop-blur-md shadow-[0px_8px_24px_rgba(26,43,88,0.08)] border-[0.5px] border-indigo-wash/10 flex items-center justify-center p-2">
+<img class="w-full h-full object-cover rounded-full" data-alt="A stunning, modern logo design of a mythical Phoenix (Fenghuang) stylized with sleek, high-tech geometric lines combined with traditional She ethnic embroidery motifs. The Phoenix is vibrant with Phoenix Red, Orange, and metallic Jade Green accents, set against a clean, glowing Modern Guochao aesthetic background. The lighting is dynamic, highlighting the metallic and glass-like textures of the logo." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhF0fDzR_ftfC2wCyUAQE9Lvr5Bp80Mz8odzBCLJWynsdFKJb125YpXcAiVbed-FpSGLoQm5-z3roNtFcCr0JRN2x7bTV5_dKCehqz7aOTzQ4e-4G98JOFTosGK_Lcrpp9CU1unVCp4uQCKOOvkyGQYVXBCMFEMXErQ6tJ2zBxgfn-NjX8btg4JPP6A12J3jU20T4w8xEJeUIqzsJQgubrBvLM0OHQKrWt_Tr_QM3HNUQM3Srbens2"/>
+</div>
+<!-- App Name -->
+<h1 class="font-display-lg text-display-lg text-primary tracking-tight">畲韵奇旅</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2 text-center opacity-80">探索数字民族之美</p>
+</div>
+<!-- Bottom Section: Actions -->
+<div class="z-10 w-full max-w-sm flex flex-col gap-stack-sm w-full px-4 mb-4">
+<!-- Primary Action: WeChat Login -->
+<button class="btn-guochao-primary w-full bg-jade-green text-surface-container-lowest font-label-md text-label-md py-4 rounded-xl flex items-center justify-center gap-2 shadow-[0px_8px_16px_rgba(42,157,143,0.2)]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">chat</span>
+                微信一键登录
+            </button>
+<!-- Secondary Action: Mobile Number Login -->
+<button class="w-full bg-surface-container text-primary font-label-md text-label-md py-4 rounded-xl flex items-center justify-center gap-2 border-[0.5px] border-outline-variant/30 hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">phone_iphone</span>
+                手机号登录/注册
+            </button>
+<!-- Terms & Privacy Policy Checkbox -->
+<div class="mt-stack-md flex items-start gap-3 px-2">
+<div class="flex items-center h-5">
+<input class="custom-checkbox w-4 h-4 rounded-sm border-outline text-primary focus:ring-primary focus:ring-offset-surface bg-transparent transition-colors cursor-pointer" id="terms" type="checkbox"/>
+</div>
+<label class="font-label-sm text-label-sm text-on-surface-variant leading-relaxed cursor-pointer" for="terms">
+                    我已阅读并同意
+                    <a class="text-primary hover:underline underline-offset-2 decoration-primary/50 transition-all" href="#">《服务协议》</a>
+                    与
+                    <a class="text-primary hover:underline underline-offset-2 decoration-primary/50 transition-all" href="#">《隐私政策》</a>
+                    ，未注册绑定的手机号验证后将自动创建账号。
+                </label>
+</div>
+</div>
+</main>
+<script>
+        // Simple validation to ensure terms are checked before primary action
+        document.addEventListener('DOMContentLoaded', () => {
+            const wechatBtn = document.querySelector('.btn-guochao-primary');
+            const termsCheckbox = document.getElementById('terms');
+            
+            wechatBtn.addEventListener('click', (e) => {
+                if (!termsCheckbox.checked) {
+                    e.preventDefault();
+                    // Simple visual feedback if not checked
+                    termsCheckbox.parentElement.classList.add('animate-pulse');
+                    termsCheckbox.classList.add('border-error');
+                    setTimeout(() => {
+                        termsCheckbox.parentElement.classList.remove('animate-pulse');
+                        termsCheckbox.classList.remove('border-error');
+                    }, 1000);
+                } else {
+                    // Proceed with login logic
+                    console.log('Proceeding to WeChat login...');
+                }
+            });
+        });
+    </script>
+</body></html>

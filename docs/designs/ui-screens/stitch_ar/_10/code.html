@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<title>畲韵奇旅 - 游戏首页</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container": "#efeeea",
+                        "on-tertiary-container": "#cf8345",
+                        "surface-dim": "#dbdad6",
+                        "indigo-wash": "#354A81",
+                        "secondary-fixed-dim": "#ffb3b1",
+                        "silver-metallic": "#C0C0C0",
+                        "on-tertiary": "#ffffff",
+                        "on-surface": "#1b1c1a",
+                        "tertiary-fixed-dim": "#ffb780",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#f5f3ef",
+                        "primary-fixed": "#dbe1ff",
+                        "surface-container-high": "#eae8e4",
+                        "tertiary-container": "#4a2300",
+                        "on-secondary-fixed-variant": "#92001c",
+                        "on-primary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed": "#041845",
+                        "primary": "#011543",
+                        "on-secondary": "#ffffff",
+                        "on-surface-variant": "#45464f",
+                        "tertiary": "#2b1200",
+                        "on-primary-fixed-variant": "#354573",
+                        "background": "#fbf9f5",
+                        "surface-container-highest": "#e4e2de",
+                        "on-secondary-container": "#fffbff",
+                        "on-tertiary-fixed-variant": "#6f3800",
+                        "secondary": "#b7102a",
+                        "primary-fixed-dim": "#b5c5fb",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed": "#410007",
+                        "on-background": "#1b1c1a",
+                        "secondary-container": "#db313f",
+                        "outline-variant": "#c5c6d0",
+                        "surface-tint": "#4d5d8d",
+                        "inverse-surface": "#30312e",
+                        "outline": "#757680",
+                        "surface-bright": "#fbf9f5",
+                        "inverse-primary": "#b5c5fb",
+                        "on-primary-container": "#8393c7",
+                        "on-tertiary-fixed": "#2f1400",
+                        "surface-variant": "#e4e2de",
+                        "inverse-on-surface": "#f2f0ed",
+                        "surface": "#fbf9f5",
+                        "on-error": "#ffffff",
+                        "jade-green": "#2A9D8F",
+                        "secondary-fixed": "#ffdad8",
+                        "tertiary-fixed": "#ffdcc4",
+                        "primary-container": "#1a2b58",
+                        "on-error-container": "#93000a"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "stack-md": "16px",
+                        "stack-lg": "32px",
+                        "margin-desktop": "24px",
+                        "stack-sm": "8px",
+                        "gutter": "12px",
+                        "unit": "4px",
+                        "margin-mobile": "16px",
+                        "safe": "env(safe-area-inset-bottom)"
+                    },
+                    fontFamily: {
+                        "headline-lg-mobile": ["Noto Serif"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Noto Serif"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "display-lg": ["Noto Serif"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "headline-md": ["Noto Serif"],
+                        "label-md": ["Plus Jakarta Sans"]
+                    },
+                    fontSize: {
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-lg": ["30px", { "lineHeight": "38px", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["22px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .pattern-bg {
+            background-image: radial-gradient(circle at 100% 100%, rgba(53, 74, 129, 0.03) 0%, rgba(53, 74, 129, 0.03) 6px, transparent 6px, transparent 10px),
+                              radial-gradient(circle at 0% 100%, rgba(53, 74, 129, 0.03) 0%, rgba(53, 74, 129, 0.03) 6px, transparent 6px, transparent 10px),
+                              radial-gradient(circle at 100% 0%, rgba(53, 74, 129, 0.03) 0%, rgba(53, 74, 129, 0.03) 6px, transparent 6px, transparent 10px),
+                              radial-gradient(circle at 0% 0%, rgba(53, 74, 129, 0.03) 0%, rgba(53, 74, 129, 0.03) 6px, transparent 6px, transparent 10px);
+            background-size: 24px 24px;
+        }
+        .btn-guochao {
+            box-shadow: 0 4px 0 #000c2b;
+            transition: all 0.1s;
+        }
+        .btn-guochao:active {
+            transform: translateY(4px);
+            box-shadow: 0 0px 0 #000c2b;
+        }
+        .ar-glow {
+            animation: pulse-glow 2s infinite;
+        }
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 0 0 rgba(183, 16, 42, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(183, 16, 42, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(183, 16, 42, 0); }
+        }
+        .stitch-divider {
+            border-bottom: 2px dashed rgba(53, 74, 129, 0.2);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 0.5px solid rgba(53, 74, 129, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex flex-col pattern-bg pb-24 relative overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-margin-mobile h-16 fixed top-0 z-50 bg-surface dark:bg-surface-dim">
+<div class="flex items-center gap-gutter">
+<div class="relative">
+<div class="w-10 h-10 rounded-full border-2 border-primary overflow-hidden">
+<img alt="User Avatar" class="w-full h-full object-cover" data-alt="A stylized 2D avatar of a young She ethnic girl in traditional indigo clothing, cute and modern illustration style, light background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCk-ffNCqT9F-O6zwL8F1mALAai3U51IPLQO2Jj8VoKfkf3xHmvIaNDLuu2Zz_UD9lLmlLCC1q3ywtaDoamQ6O2C31ovCDJ3RUXXp1nThSFkVGAy_EFd-skwD3a4_3fmry9Lnlkq_kboZf0eewf8LRwpTHGUGfa48Z-CEaRvwMz4HHvBaPmiYBff7WM_wcptc4tQiT9HH2PdMBT9lu5JLcPRBB4gy-FSmviGkTTLtlIvjPRDnIATQyA"/>
+</div>
+<div class="absolute -bottom-1 -right-1 bg-secondary text-on-secondary text-[10px] font-bold px-1.5 rounded-full border border-surface">
+                    Lv.5
+                </div>
+</div>
+<h1 class="font-headline-md text-headline-md-mobile font-bold text-secondary dark:text-secondary-fixed">畲韵奇旅</h1>
+</div>
+<div class="flex items-center gap-2 bg-surface-container-high rounded-full px-3 py-1.5 border border-indigo-wash/10 shadow-sm">
+<span class="material-symbols-outlined text-primary text-[18px]" style="font-variation-settings: 'FILL' 1;">generating_tokens</span>
+<span class="font-label-md text-label-md text-primary font-bold">1280</span>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-grow pt-20 px-margin-mobile flex flex-col gap-stack-lg z-10">
+<!-- Hero Section: IP Character & Action -->
+<section class="relative flex flex-col items-center justify-center min-h-[45vh] mt-4">
+<!-- Decorative Backing -->
+<div class="absolute w-64 h-64 bg-primary-fixed rounded-full opacity-30 blur-3xl -z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
+<!-- Character Image -->
+<div class="relative w-full max-w-[300px] aspect-square flex items-center justify-center">
+<img alt="Main IP Character" class="w-full h-full object-contain drop-shadow-2xl z-10" data-alt="A high-quality 3D Q-version She ethnic girl character in vibrant indigo traditional dress with a small glowing phoenix companion, dynamic lively pose, bright studio lighting, transparent background style, highly detailed textures." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDp7q6q6nz1q8DQJr4Z688fDHn7igxIirq3VnMAt_-ckitExJvD5yUQGvfDqAYdPInpGjAe6oCfFCSq4uoxZjTcamI8DAMRZFyY5uislBwNQtWSHbBNL5L50178OgM_7-lU6cr0mqga4dSorA0OOhsSnphQN7mC8Aj2isrdb3ASkCt0u1fpyONjfSU5gdHfifps7AbhSMWjuRkhtZqG7rVnfvcMGSfUNto81VgClicxUsU24nDCIDx"/>
+<!-- Floating Dialogue -->
+<div class="absolute -top-4 right-4 glass-card px-4 py-2 rounded-2xl rounded-bl-sm border-jade-green border-2 z-20 animate-bounce" style="animation-duration: 3s;">
+<p class="font-label-md text-label-md text-primary font-bold">今天要去哪里探索呀？</p>
+</div>
+</div>
+<!-- Primary Action Button -->
+<button class="btn-guochao mt-6 w-full max-w-[280px] bg-primary text-on-primary rounded-xl py-4 px-6 flex items-center justify-center gap-3 relative overflow-hidden group">
+<div class="absolute inset-0 opacity-5 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+PHBhdGggZD0iTTAgMGwyMCAyME0yMCAwbC0yMCAyMCIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjIiLz48L3N2Zz4=')]"></div>
+<span class="material-symbols-outlined text-on-primary" style="font-variation-settings: 'FILL' 1;">explore</span>
+<span class="font-headline-md text-[20px] leading-tight font-bold tracking-wider z-10">继续奇旅</span>
+<span class="material-symbols-outlined text-on-primary opacity-50 group-hover:translate-x-1 transition-transform z-10">arrow_forward_ios</span>
+</button>
+</section>
+<!-- Stats & Activity Bento Grid -->
+<section class="grid grid-cols-2 gap-gutter">
+<!-- Daily Task Card -->
+<div class="glass-card rounded-xl p-4 flex flex-col gap-2 shadow-[0px_-4px_16px_rgba(26,43,88,0.08)]">
+<div class="flex items-center gap-2 mb-1">
+<div class="w-6 h-6 rounded-full bg-tertiary-fixed-dim flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary text-[14px]">checklist</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant">每日任务</span>
+</div>
+<h3 class="font-headline-md text-[18px] font-bold text-primary">探索古村落</h3>
+<div class="mt-auto pt-2 flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-secondary font-bold">未完成</span>
+<button class="bg-surface-container-high rounded-full w-8 h-8 flex items-center justify-center hover:bg-surface-dim transition-colors">
+<span class="material-symbols-outlined text-primary text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Progress Card -->
+<div class="glass-card rounded-xl p-4 flex flex-col gap-2 shadow-[0px_-4px_16px_rgba(26,43,88,0.08)] relative overflow-hidden">
+<div class="absolute top-0 right-0 w-16 h-16 bg-secondary-fixed-dim opacity-20 rounded-bl-full"></div>
+<div class="flex items-center gap-2 mb-1">
+<div class="w-6 h-6 rounded-full bg-secondary-fixed-dim flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary text-[14px]">menu_book</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant">第一章进度</span>
+</div>
+<div class="flex items-end gap-1">
+<span class="font-display-lg text-[28px] font-bold text-primary leading-none">4</span>
+<span class="font-label-md text-label-md text-outline mb-1">/10</span>
+</div>
+<div class="mt-auto pt-2 w-full">
+<div class="h-2 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-secondary rounded-full w-[40%]"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Recommended Collection Item -->
+<section class="glass-card rounded-xl p-4 shadow-[0px_-4px_16px_rgba(26,43,88,0.08)] flex gap-4 items-center mb-6">
+<div class="w-16 h-16 rounded-lg bg-surface-container-high border border-indigo-wash/10 flex-shrink-0 overflow-hidden">
+<img alt="Artifact" class="w-full h-full object-cover" data-alt="A macro shot of a detailed traditional She silver necklace artifact, sparkling against a soft light background, high resolution museum quality photograph." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIkuUi-RVBtnvnFO87LrhptsMyfDawbDr7Ge_NA2n5PIOYBBotzebY67K595zgFaxhBaLJaoyXfkwLPKO1DkbNZpG2uxGBKdQETeCzWXIQXioOXthHxSQejJBpekvOeo6nQaw3M6ZXqiQvFFrlmhKWFXQzhLv6DHBG8hpiWoGr_sPnJQZjH6G1DgR2Ms5ZOnyHmxbnV1dyfSX6AWx977SFWndxMlgP3ESG2jUmYVB5hmWdLODFvvbS"/>
+</div>
+<div class="flex-grow flex flex-col">
+<div class="flex justify-between items-start">
+<span class="font-label-sm text-label-sm bg-primary-fixed text-primary px-2 py-0.5 rounded text-[10px]">新发现</span>
+<span class="material-symbols-outlined text-outline text-[18px]">more_horiz</span>
+</div>
+<h4 class="font-body-md text-[16px] font-bold text-primary mt-1">凤凰银饰图谱</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant line-clamp-1">在老屋前触发AR扫描解锁</p>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-end pb-safe px-2 h-20 shadow-[0px_-4px_16px_rgba(26,43,88,0.08)] bg-surface-container dark:bg-surface-container-lowest rounded-t-xl md:hidden">
+<!-- 村落 (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant p-2 hover:opacity-80 pb-4" href="#">
+<span class="material-symbols-outlined mb-1 text-[24px]">home</span>
+<span class="font-label-sm text-label-sm">村落</span>
+</a>
+<!-- 探索 (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant p-2 hover:opacity-80 pb-4 pr-6" href="#">
+<span class="material-symbols-outlined mb-1 text-[24px]">map</span>
+<span class="font-label-sm text-label-sm">探索</span>
+</a>
+<!-- AR Center Button (Active/Highlight) -->
+<div class="absolute left-1/2 -top-6 transform -translate-x-1/2 flex flex-col items-center">
+<a class="w-16 h-16 rounded-full bg-gradient-to-b from-silver-metallic to-surface-container-highest border-4 border-surface-container flex items-center justify-center ar-glow shadow-lg relative overflow-hidden group" href="#">
+<div class="absolute inset-0 bg-primary opacity-90"></div>
+<span class="material-symbols-outlined text-on-primary text-[32px] z-10 group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 1;">center_focus_strong</span>
+</a>
+<span class="font-label-sm text-label-sm text-primary font-bold mt-1">扫描</span>
+</div>
+<!-- 收藏 (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant p-2 hover:opacity-80 pb-4 pl-6" href="#">
+<span class="material-symbols-outlined mb-1 text-[24px]">auto_awesome_motion</span>
+<span class="font-label-sm text-label-sm">收藏</span>
+</a>
+<!-- 我的 (Active based on 'Home/Dashboard' logic, but contextually '村落' or just leaving as standard navigation layout with AR prominent) -->
+<!-- *Note: As this is the game home screen, typically '村落' or a specific dashboard tab would be active. Let's make '村落' active and adjust classes.* -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant p-2 hover:opacity-80 pb-4" href="#">
+<span class="material-symbols-outlined mb-1 text-[24px]">person</span>
+<span class="font-label-sm text-label-sm">我的</span>
+</a>
+</nav>
+<!-- Adjusting active state for BottomNavBar correctly using JSON instructions -->
+<script>
+        // Self-correction for active state based on instructions:
+        // Since it's the "Home Screen", "村落" is the best fit for active tab.
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabs = document.querySelectorAll('nav > a');
+            if(tabs.length > 0) {
+                // Make the first tab (村落) active
+                const activeTab = tabs[0];
+                activeTab.className = "flex flex-col items-center justify-center text-secondary dark:text-secondary-container bg-secondary-fixed-dim/20 rounded-full p-2 hover:opacity-80 scale-90 duration-150 transition-all mb-2";
+                activeTab.querySelector('.material-symbols-outlined').style.fontVariationSettings = "'FILL' 1";
+            }
+        });
+    </script>
+</body></html>

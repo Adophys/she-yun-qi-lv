@@ -1,0 +1,92 @@
+name: she-yun-qi-lv
+
+x-backend-environment: &backend-environment
+  APP_ENV: production
+  DATABASE_URL: ${DATABASE_URL}
+  APP_JWT_SECRET: ${APP_JWT_SECRET}
+  ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
+  APP_JWT_ISSUER: sheyunqilv-app
+  APP_JWT_AUDIENCE: sheyunqilv-miniapp
+  ADMIN_JWT_ISSUER: sheyunqilv-admin
+  ADMIN_JWT_AUDIENCE: sheyunqilv-web
+  ACCESS_TOKEN_TTL_MINUTES: ${ACCESS_TOKEN_TTL_MINUTES:-30}
+  REFRESH_TOKEN_TTL_DAYS: ${REFRESH_TOKEN_TTL_DAYS:-7}
+  INITIAL_ADMIN_USERNAME: ${INITIAL_ADMIN_USERNAME:-admin}
+  INITIAL_ADMIN_PASSWORD: ${INITIAL_ADMIN_PASSWORD}
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: syql-postgres-prod
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-sheyunqilv}
+      POSTGRES_USER: ${POSTGRES_USER:-sheyunqilv}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres-prod-data:/var/lib/postgresql/data
+    networks:
+      - data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-sheyunqilv} -d ${POSTGRES_DB:-sheyunqilv}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  db-init:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      <<: *backend-environment
+    command: ["python", "-m", "app.commands.bootstrap_db"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - data
+    restart: on-failure
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      <<: *backend-environment
+    volumes:
+      - private-media:/app/storage/private-media
+    networks:
+      - data
+      - edge
+    depends_on:
+      db-init:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health/ready"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  nginx:
+    build:
+      context: ./deploy/nginx
+      dockerfile: Dockerfile
+    environment:
+      NGINX_SITE_CONFIG: ${NGINX_SITE_CONFIG:-http}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - private-media:/app/storage/private-media:ro
+    networks:
+      - edge
+    depends_on:
+      - backend
+
+volumes:
+  postgres-prod-data:
+  private-media:
+
+networks:
+  edge:
+  data:
+    internal: true

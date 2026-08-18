@@ -1,0 +1,56 @@
+# Environment
+.env
+.env.*
+!.env.example
+!.env.production.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+env/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node
+node_modules/
+dist/
+build/
+out/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Storage
+storage/private-media/*
+!storage/private-media/.gitkeep
+
+# WorkBuddy
+.workbuddy/
+
+# Uni-app
+miniapp/uni-app/unpackage/
+miniapp/uni-app/.hbuilderx/
+
+# Frontend
+frontend/dist/

@@ -1,0 +1,39 @@
+{
+  "name": "畲韵奇旅",
+  "appid": "__UNI__SHEYUNQILV",
+  "description": "畲族文化数字化体验平台",
+  "versionName": "0.1.0",
+  "versionCode": "1",
+  "transformPx": false,
+  "app-plus": {
+    "usingComponents": true,
+    "nvueStyleCompiler": "uni-app",
+    "compilerVersion": 3,
+    "splashscreen": {
+      "alwaysShowBeforeRender": true,
+      "waiting": true,
+      "autoclose": true,
+      "delay": 0
+    },
+    "modules": {},
+    "distribute": {
+      "android": {},
+      "ios": {},
+      "sdkConfigs": {}
+    }
+  },
+  "mp-weixin": {
+    "appid": "touristappid",
+    "setting": {
+      "urlCheck": false
+    },
+    "usingComponents": true,
+    "lazyCodeLoading": "requiredComponents",
+    "permission": {
+      "scope.camera": {
+        "desc": "用于 AR 扫描识别文化符号"
+      }
+    }
+  },
+  "vueVersion": "3"
+}

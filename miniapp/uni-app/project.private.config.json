@@ -1,0 +1,7 @@
+{
+  "description": "本地私有配置，不上传 Git",
+  "projectname": "sheyunqilv",
+  "setting": {
+    "compileHotReLoad": true
+  }
+}

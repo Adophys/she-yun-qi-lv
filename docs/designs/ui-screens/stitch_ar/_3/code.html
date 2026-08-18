@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>She Yun Qi Lv - Level Completion</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "indigo-wash": "#354A81",
+                        "inverse-on-surface": "#f2f0ed",
+                        "error": "#ba1a1a",
+                        "jade-green": "#2A9D8F",
+                        "secondary-fixed-dim": "#ffb3b1",
+                        "on-surface-variant": "#45464f",
+                        "surface-container": "#efeeea",
+                        "on-primary-fixed-variant": "#354573",
+                        "on-secondary-container": "#fffbff",
+                        "surface": "#fbf9f5",
+                        "primary-fixed": "#dbe1ff",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-container": "#cf8345",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed-variant": "#92001c",
+                        "inverse-primary": "#b5c5fb",
+                        "on-tertiary-fixed": "#2f1400",
+                        "surface-dim": "#dbdad6",
+                        "on-background": "#1b1c1a",
+                        "tertiary-fixed": "#ffdcc4",
+                        "on-secondary-fixed": "#410007",
+                        "inverse-surface": "#30312e",
+                        "surface-container-highest": "#e4e2de",
+                        "tertiary-container": "#4a2300",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed": "#041845",
+                        "primary-container": "#1a2b58",
+                        "secondary": "#b7102a",
+                        "outline-variant": "#c5c6d0",
+                        "on-primary-container": "#8393c7",
+                        "primary": "#011543",
+                        "tertiary": "#2b1200",
+                        "surface-container-high": "#eae8e4",
+                        "secondary-fixed": "#ffdad8",
+                        "surface-tint": "#4d5d8d",
+                        "surface-variant": "#e4e2de",
+                        "on-surface": "#1b1c1a",
+                        "tertiary-fixed-dim": "#ffb780",
+                        "surface-container-low": "#f5f3ef",
+                        "primary-fixed-dim": "#b5c5fb",
+                        "on-error": "#ffffff",
+                        "surface-bright": "#fbf9f5",
+                        "secondary-container": "#db313f",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "silver-metallic": "#C0C0C0",
+                        "on-tertiary-fixed-variant": "#6f3800",
+                        "outline": "#757680",
+                        "background": "#fbf9f5"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "12px",
+                        "stack-lg": "32px",
+                        "stack-sm": "8px",
+                        "unit": "4px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "24px",
+                        "stack-md": "16px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Noto Serif"],
+                        "headline-md": ["Noto Serif"],
+                        "headline-lg-mobile": ["Noto Serif"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "label-md": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Noto Serif"],
+                        "label-sm": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-md": ["22px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-lg": ["30px", { "lineHeight": "38px", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .star-glow {
+            filter: drop-shadow(0 0 12px rgba(255, 179, 177, 0.8));
+            animation: pulse-glow 2s infinite alternate;
+        }
+        @keyframes pulse-glow {
+            from { filter: drop-shadow(0 0 8px rgba(255, 179, 177, 0.5)); }
+            to { filter: drop-shadow(0 0 16px rgba(255, 179, 177, 1)); }
+        }
+        .rays-bg {
+            background: radial-gradient(circle at top, rgba(255, 218, 214, 0.4) 0%, transparent 60%);
+        }
+        .guochao-btn {
+            position: relative;
+            overflow: hidden;
+        }
+        .guochao-btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url('data:image/svg+xml;utf8,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 0L20 10L10 20L0 10L10 0Z" fill="white" fill-opacity="0.05"/></svg>');
+            background-size: 10px;
+            pointer-events: none;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 0.5px solid rgba(53, 74, 129, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen relative overflow-hidden flex flex-col font-body-md">
+<!-- Top App Bar (Modified for transactional screen - hidden nav icons, just title) -->
+<header class="flex justify-between items-center w-full px-margin-mobile h-16 fixed top-0 z-50 bg-surface/80 backdrop-blur-md">
+<div class="flex items-center">
+<span class="material-symbols-outlined text-primary cursor-pointer" onclick="console.log('Back')">arrow_back_ios</span>
+</div>
+<div class="font-headline-md text-headline-md-mobile font-bold text-secondary">
+            畲韵奇旅
+        </div>
+<div class="w-6"></div> <!-- Spacer for centering -->
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 w-full max-w-md mx-auto pt-20 pb-safe px-margin-mobile flex flex-col relative z-10">
+<!-- Background Effects -->
+<div class="absolute inset-0 pointer-events-none rays-bg z-0"></div>
+<div class="absolute top-0 left-1/2 -translate-x-1/2 w-[200%] h-[200%] pointer-events-none z-0" style="background-image: repeating-conic-gradient(from 0deg, transparent 0deg 15deg, rgba(255,218,214,0.15) 15deg 30deg); transform-origin: top center; animation: spin 60s linear infinite;"></div>
+<style>
+            @keyframes spin { 100% { transform: translateX(-50%) rotate(360deg); } }
+        </style>
+<div class="relative z-10 flex flex-col items-center flex-1 mt-8">
+<!-- Headline -->
+<h1 class="font-display-lg text-display-lg text-secondary mb-stack-sm text-center drop-shadow-md">闯关成功</h1>
+<p class="font-label-md text-label-md text-on-surface-variant mb-stack-md text-center">Challenge Successful</p>
+<!-- Stars Rating -->
+<div class="flex justify-center items-center gap-stack-sm mb-stack-lg">
+<span class="material-symbols-outlined text-secondary text-5xl star-glow" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary text-6xl star-glow -translate-y-2" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary text-5xl star-glow" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<!-- Rewards Glass Card -->
+<div class="glass-card w-full rounded-xl p-stack-md shadow-lg mb-stack-lg flex flex-col gap-stack-sm">
+<h2 class="font-headline-md text-headline-md-mobile text-primary border-b border-indigo-wash/10 pb-unit mb-unit flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">redeem</span> 获得奖励
+                </h2>
+<!-- Reward Item 1: Culture Points -->
+<div class="flex items-center justify-between p-2 rounded-lg bg-surface hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">diamond</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">文化积分</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Culture Points</p>
+</div>
+</div>
+<span class="font-headline-md text-headline-md-mobile text-jade-green">+100</span>
+</div>
+<!-- Reward Item 2: IP Skin Fragment -->
+<div class="flex items-center justify-between p-2 rounded-lg bg-surface hover:bg-surface-container-high transition-colors mt-2">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-md bg-secondary-fixed flex items-center justify-center text-secondary relative overflow-hidden">
+<img class="absolute inset-0 w-full h-full object-cover opacity-80" data-alt="A small detailed digital icon of a traditional She ethnic garment fragment, woven with bright red and indigo threads, glowing slightly, modern game UI style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFHfDKuIeRdSqM11gicvfb-sZKd7_DnPsyR6Vq2vCOw94uzYaMQUS9J9uKw1B_lhXTdDVgLdsyEac3lFoWy-noX8cYajovP9OQAGMBV0dbPMxrnsxPnBNLRYwO-FRu_xkF3kX-OnmMIT3efgC8Ke1fGBwolZbGqM0asXGcKNvxLNkMaloGTjHN4YJOYg0rjtK8aIQeohUenTYPhY8pgSF2AnAPVMh8BF8Q5nD9AxNoSC7mj556CxBb"/>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">凤凰装碎片</p>
+<div class="w-24 h-1.5 bg-surface-variant rounded-full mt-1 overflow-hidden">
+<div class="h-full bg-secondary w-[20%] rounded-full"></div>
+</div>
+</div>
+</div>
+<span class="font-label-md text-label-md text-secondary">2/10</span>
+</div>
+<!-- Reward Item 3: Culture Archive Card -->
+<div class="flex flex-col p-2 rounded-lg bg-surface border border-indigo-wash/5 mt-2">
+<p class="font-label-md text-label-md text-on-surface mb-2">解锁档案 (Unlocked Archive)</p>
+<div class="relative h-24 rounded-lg overflow-hidden flex items-end p-2 bg-black/20">
+<img class="absolute inset-0 w-full h-full object-cover -z-10" data-alt="A beautiful, high-quality digital illustration of a traditional She ethnic silver headdress, resting on intricately woven indigo fabric, bathed in soft warm light, modern national tide aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfdu3v4vh6vVHmY63wI1aCwfZF7NzbRn3IfTpxfdpkPwRX2CuUqS56blyN9qq7TgX1WdzUTVbWV-uEJwdcz8J7W_xSAaelIwQj4_J7gmkW1G-KXbG5-5xwpk1-v_f0yyMR9GbhwwEA5mUS0-HG17vG8ndnYWplKA6qivOIFNAHRfJdxq4d3DU3Bs1Tto4EfwKK4DqZ8AbplV69u5u1QtrpZ1G4IwrkHdKEc8rKsW-qUg5pSulxZOwe"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent -z-10"></div>
+<p class="font-label-md text-label-md text-white">畲族银饰锻造技艺</p>
+</div>
+</div>
+</div>
+<!-- IP Character -->
+<div class="relative w-32 h-32 mb-stack-lg">
+<img class="w-full h-full object-contain" data-alt="A cute 3D chibi-style character of a young She ethnic girl wearing traditional indigo and red clothing with a silver headdress, jumping in a happy, celebratory pose, modern game UI mascot style, vibrant colors." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAc-XnGdcwSQplQjdyOpkru_4nbauLjeyJ2syy1T1u-evyVJFUQ3m2YQrYM3nGSzYn5RPspVn6AG-_lhAIJ66Wn21-Li0T3Sflp63Ok6eLYk7WQQ7RizEOpfkAWp0LsVs0w442Dn_hTYOMCAvR4ZDxsbRDE4iryucO73tVi-fyXc5n-MhsmTCBnr2YR7GzZJ5t5Mn7CUY68pEigIlvlpna8KUd1WUyJiXvVVQEg2CDXz91H34fCE9xH"/>
+</div>
+<!-- Action Buttons -->
+<div class="w-full flex gap-stack-sm mt-auto pb-4">
+<button class="flex-1 py-3 px-4 rounded-xl border border-primary text-primary font-label-md text-label-md bg-surface hover:bg-surface-container-high transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">menu_book</span> 查看知识
+                </button>
+<button class="flex-[2] py-3 px-4 rounded-xl bg-primary text-on-primary font-headline-md text-headline-md-mobile border-b-2 border-primary-container guochao-btn shadow-[0_8px_16px_rgba(1,21,67,0.2)] active:translate-y-1 active:border-b-0 active:shadow-none transition-all flex items-center justify-center gap-2">
+                    下一关 <span class="material-symbols-outlined">arrow_forward_ios</span>
+</button>
+</div>
+</div>
+</main>
+</body></html>

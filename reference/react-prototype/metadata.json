@@ -1,0 +1,6 @@
+{
+  "name": "畲韵奇旅",
+  "description": "沉浸式探索畲族非遗文化与数字民俗互动的奇幻旅程，融合AR扫描、非遗图鉴收集、IP服饰换装、文化拼图解谜与古村落探险。",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

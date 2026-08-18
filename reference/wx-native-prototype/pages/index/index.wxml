@@ -1,0 +1,396 @@
+<!-- pages/index/index.wxml -->
+<view class="app-container">
+  <!-- 顶部状态栏与文化金字塔导航 -->
+  <view class="top-nav">
+    <view class="brand-row">
+      <view class="brand-title">
+        <text class="brand-accent">畲韵</text>奇旅
+      </view>
+      <view class="user-pill">
+        <text class="level-tag">Lv.{{user.level}}</text>
+        <text class="points-text">✨ {{user.points}}</text>
+      </view>
+    </view>
+    <view class="brand-sub">国家级非物质文化遗产 · 沉浸式数字活化展卷</view>
+  </view>
+
+  <!-- 主内容区域切换 -->
+  <scroll-view scroll-y class="main-scroll">
+    
+    <!-- TAB 1: 非遗寨落 (Village) -->
+    <view wx:if="{{activeTab === 'village'}}" class="tab-content">
+      <!-- 每日灵签卡片 -->
+      <view class="fortune-card" bindtap="drawDailySign">
+        <view class="fortune-header">
+          <text class="fortune-icon">📜</text>
+          <text class="fortune-badge">每日山哈吉签</text>
+          <text class="fortune-action">{{dailySign.revealed ? '今日已启' : '点击求签 +50修为'}}</text>
+        </view>
+        <view wx:if="{{dailySign.revealed}}" class="fortune-body">
+          <view class="fortune-title">【 {{dailySign.title}} 】</view>
+          <view class="fortune-poetry">“{{dailySign.poetry}}”</view>
+          <view class="fortune-meaning">{{dailySign.meaning}}</view>
+        </view>
+        <view wx:else class="fortune-placeholder">
+          虔心拂过经卷，聆听远古山哈祖训赐福...
+        </view>
+      </view>
+
+      <!-- 核心非遗建筑群 -->
+      <view class="section-header">
+        <text class="section-title">寨落文脉工坊</text>
+        <text class="section-tip">点击探索非遗技艺</text>
+      </view>
+      
+      <view class="building-list">
+        <view 
+          wx:for="{{buildings}}" 
+          wx:key="id" 
+          class="building-card" 
+          bindtap="openBuildingDetail" 
+          data-item="{{item}}"
+        >
+          <view class="b-icon-wrap">{{item.icon}}</view>
+          <view class="b-info">
+            <view class="b-top">
+              <text class="b-name">{{item.name}}</text>
+              <text wx:if="{{item.hot}}" class="b-tag-hot">热访</text>
+              <text class="b-tag">{{item.tag}}</text>
+            </view>
+            <view class="b-desc">{{item.desc}}</view>
+            <view class="b-progress">
+              <text class="b-progress-text">遗珠探索进度：{{item.progress}}</text>
+            </view>
+          </view>
+          <view class="b-arrow">❯</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- TAB 2: 奇旅探索 (Explore) -->
+    <view wx:if="{{activeTab === 'explore'}}" class="tab-content">
+      <!-- 快捷活动入口 -->
+      <view class="explore-hero">
+        <view class="hero-card" bindtap="startQuiz">
+          <view class="hero-icon">🏮</view>
+          <view class="hero-text">
+            <view class="hero-title">非遗问答擂台</view>
+            <view class="hero-desc">答题赢取千点修为，问鼎文魁</view>
+          </view>
+          <view class="hero-btn">即刻挑战</view>
+        </view>
+
+        <view class="hero-card hero-puzzle" bindtap="shufflePuzzle">
+          <view class="hero-icon">🧩</view>
+          <view class="hero-text">
+            <view class="hero-title">彩带拼图解谜</view>
+            <view class="hero-desc">{{puzzleSolved ? '已完美还原！点击重新打乱' : '点击两块碎片互换位置还原'}}</view>
+          </view>
+          <view class="hero-btn">{{puzzleSolved ? '再玩一次' : '复原中'}}</view>
+        </view>
+      </view>
+
+      <!-- 拼图互动区域 -->
+      <view class="puzzle-area">
+        <view class="puzzle-grid">
+          <view 
+            wx:for="{{puzzlePieces}}" 
+            wx:key="id" 
+            class="puzzle-piece {{selectedPieceIndex === index ? 'piece-selected' : ''}}"
+            style="background: {{item.bg}}"
+            bindtap="tapPiece"
+            data-index="{{index}}"
+          >
+            <text class="piece-label">图块 {{item.id + 1}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 故事主线关卡 -->
+      <view class="section-header">
+        <text class="section-title">奇旅历险主线</text>
+        <text class="section-tip">通关收集传世碎片</text>
+      </view>
+
+      <view class="stage-list">
+        <view wx:for="{{stages}}" wx:key="id" class="stage-card {{item.unlocked ? '' : 'stage-locked'}}">
+          <view class="stage-badge">{{item.id}}</view>
+          <view class="stage-main">
+            <view class="stage-title">
+              <text>{{item.title}}</text>
+              <text wx:if="{{item.completed}}" class="stage-stars">⭐⭐⭐</text>
+            </view>
+            <view class="stage-desc">{{item.desc}}</view>
+          </view>
+          <view class="stage-status">
+            <text wx:if="{{item.completed}}" class="status-done">已通关</text>
+            <text wx:elif="{{item.unlocked}}" class="status-unlock">进行中</text>
+            <text wx:else class="status-lock">🔒 待解锁</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- TAB 3: 识物寻宝 (Scan / AR) -->
+    <view wx:if="{{activeTab === 'scan'}}" class="tab-content">
+      <view class="scan-card">
+        <view class="scanner-frame">
+          <view class="scanner-laser {{isScanning ? 'laser-animate' : ''}}"></view>
+          <view class="scanner-cross"></view>
+          <view class="scanner-hint">
+            <text class="s-icon">📷</text>
+            <text>对准非遗器物、织锦彩带、银饰或展品</text>
+          </view>
+        </view>
+        <button class="scan-btn" bindtap="triggerARScan" loading="{{isScanning}}">
+          ✨ 启动 AI 智能识物寻宝
+        </button>
+      </view>
+
+      <view class="section-header">
+        <text class="section-title">已收录的识物图鉴 ({{scannedArtifacts.length}})</text>
+      </view>
+
+      <view class="artifact-list">
+        <view wx:for="{{scannedArtifacts}}" wx:key="id" class="artifact-card">
+          <view class="art-top">
+            <text class="art-name">{{item.name}}</text>
+            <text class="art-score">匹配度 {{item.score}}%</text>
+          </view>
+          <view class="art-tag-row">
+            <text class="art-tag">{{item.tag}}</text>
+            <text class="art-time">{{item.time}}</text>
+          </view>
+          <view class="art-desc">{{item.desc}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- TAB 4: 华裳试衣 (Wardrobe) -->
+    <view wx:if="{{activeTab === 'wardrobe'}}" class="tab-content">
+      <!-- 试衣模特展示 -->
+      <view class="avatar-stage">
+        <view class="avatar-glow"></view>
+        <view class="avatar-character">
+          <view class="avatar-head">
+            <text class="avatar-face">👧🏻</text>
+            <view class="avatar-headwear">👑</view>
+          </view>
+          <view class="avatar-body">
+            <text class="avatar-clothes-icon">👘</text>
+          </view>
+        </view>
+        <view class="avatar-info-tag">
+          <text>当前装扮：【传世凤凰盛装】 · 银冠流苏</text>
+        </view>
+      </view>
+
+      <!-- 试衣品类切换 -->
+      <view class="category-tabs">
+        <view 
+          class="cat-tab {{wardrobeCategory === 'clothes' ? 'cat-active' : ''}}" 
+          bindtap="switchWardrobeCategory" 
+          data-cat="clothes"
+        >服饰华服</view>
+        <view 
+          class="cat-tab {{wardrobeCategory === 'headwear' ? 'cat-active' : ''}}" 
+          bindtap="switchWardrobeCategory" 
+          data-cat="headwear"
+        >银冠首饰</view>
+        <view 
+          class="cat-tab {{wardrobeCategory === 'accessories' ? 'cat-active' : ''}}" 
+          bindtap="switchWardrobeCategory" 
+          data-cat="accessories"
+        >图腾佩件</view>
+      </view>
+
+      <!-- 衣柜物品网格 -->
+      <view class="wardrobe-grid">
+        <view 
+          wx:for="{{wardrobeList}}" 
+          wx:key="id" 
+          wx:if="{{item.category === wardrobeCategory}}"
+          class="wardrobe-item-card {{equippedItems[item.category] === item.id ? 'item-equipped' : ''}}"
+          bindtap="equipItem"
+          data-item="{{item}}"
+        >
+          <view class="item-badge" style="background: {{item.color}}">{{item.rarity}}</view>
+          <view class="item-name">{{item.name}}</view>
+          <view class="item-desc">{{item.desc}}</view>
+          <view class="item-action">
+            <text wx:if="{{equippedItems[item.category] === item.id}}" class="tag-on">已佩戴</text>
+            <text wx:else class="tag-wear">点击换装</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- TAB 5: 山哈画卷 (Profile) -->
+    <view wx:if="{{activeTab === 'profile'}}" class="tab-content">
+      <view class="profile-card">
+        <view class="profile-avatar-wrap">
+          <image class="profile-avatar" src="{{user.avatar}}" mode="aspectFill" />
+          <view class="profile-badge">Lv.{{user.level}}</view>
+        </view>
+        <view class="profile-info">
+          <view class="profile-name">{{user.name}}</view>
+          <view class="profile-title">{{user.title}}</view>
+          <view class="profile-streak">🔥 连续研学打卡 {{user.streak}} 天</view>
+        </view>
+      </view>
+
+      <view class="stats-row">
+        <view class="stat-box">
+          <view class="stat-num">{{user.collectedCards}}</view>
+          <view class="stat-label">非遗图鉴</view>
+        </view>
+        <view class="stat-box">
+          <view class="stat-num">{{user.arDiscovered}}</view>
+          <view class="stat-label">AR 识物</view>
+        </view>
+        <view class="stat-box">
+          <view class="stat-num">{{user.points}}</view>
+          <view class="stat-label">文化修为</view>
+        </view>
+      </view>
+
+      <!-- 研学成就勋章 -->
+      <view class="section-header">
+        <text class="section-title">研学荣耀勋章</text>
+      </view>
+      <view class="badge-grid">
+        <view class="badge-card">
+          <view class="badge-icon">🏅</view>
+          <view class="badge-name">织锦传人</view>
+          <view class="badge-status">已点亮</view>
+        </view>
+        <view class="badge-card">
+          <view class="badge-icon">👑</view>
+          <view class="badge-name">银雕宗师</view>
+          <view class="badge-status">已点亮</view>
+        </view>
+        <view class="badge-card">
+          <view class="badge-icon">🎵</view>
+          <view class="badge-name">山歌百灵</view>
+          <view class="badge-status">已点亮</view>
+        </view>
+        <view class="badge-card">
+          <view class="badge-icon">🍵</view>
+          <view class="badge-name">茶道隐士</view>
+          <view class="badge-status-lock">待研学</view>
+        </view>
+      </view>
+    </view>
+
+  </scroll-view>
+
+  <!-- 底部固定导航栏 -->
+  <view class="bottom-tab-bar">
+    <view 
+      class="tab-item {{activeTab === 'village' ? 'tab-active' : ''}}" 
+      bindtap="switchTab" 
+      data-tab="village"
+    >
+      <view class="tab-icon">🏠</view>
+      <view class="tab-text">寨落</view>
+    </view>
+
+    <view 
+      class="tab-item {{activeTab === 'explore' ? 'tab-active' : ''}}" 
+      bindtap="switchTab" 
+      data-tab="explore"
+    >
+      <view class="tab-icon">🗺️</view>
+      <view class="tab-text">探索</view>
+    </view>
+
+    <view 
+      class="tab-item {{activeTab === 'scan' ? 'tab-active' : ''}}" 
+      bindtap="switchTab" 
+      data-tab="scan"
+    >
+      <view class="tab-icon scan-special">📷</view>
+      <view class="tab-text">识物</view>
+    </view>
+
+    <view 
+      class="tab-item {{activeTab === 'wardrobe' ? 'tab-active' : ''}}" 
+      bindtap="switchTab" 
+      data-tab="wardrobe"
+    >
+      <view class="tab-icon">👘</view>
+      <view class="tab-text">华裳</view>
+    </view>
+
+    <view 
+      class="tab-item {{activeTab === 'profile' ? 'tab-active' : ''}}" 
+      bindtap="switchTab" 
+      data-tab="profile"
+    >
+      <view class="tab-icon">👤</view>
+      <view class="tab-text">图卷</view>
+    </view>
+  </view>
+
+  <!-- 建筑详情弹窗 -->
+  <view wx:if="{{selectedBuilding}}" class="modal-mask" bindtap="closeBuildingDetail">
+    <view class="modal-content" catchtap="true">
+      <view class="modal-header">
+        <text class="m-icon">{{selectedBuilding.icon}}</text>
+        <text class="m-title">{{selectedBuilding.name}}</text>
+        <view class="m-close" bindtap="closeBuildingDetail">✕</view>
+      </view>
+      <view class="m-tag">{{selectedBuilding.tag}}</view>
+      <view class="m-desc">{{selectedBuilding.desc}}</view>
+      <view class="m-detail-box">
+        <view class="m-detail-item">🎯 深度互动：包含工坊历史、传世名品交互赏析、非遗技法视频拆解。</view>
+        <view class="m-detail-item">🎁 探索奖励：通关可获得【{{selectedBuilding.tag}}传世织造碎片】。</view>
+      </view>
+      <button class="m-action-btn" bindtap="closeBuildingDetail">开始沉浸探索</button>
+    </view>
+  </view>
+
+  <!-- 答题弹窗 -->
+  <view wx:if="{{quizVisible}}" class="modal-mask">
+    <view class="modal-content quiz-modal">
+      <view class="modal-header">
+        <text class="m-title">🏮 非遗文化擂台</text>
+        <view class="m-close" bindtap="closeQuiz">✕</view>
+      </view>
+
+      <view wx:if="{{!quizFinished}}" class="quiz-body">
+        <view class="q-progress">第 {{currentQuizIndex + 1}} / {{quizQuestions.length}} 题 · 得分: {{quizScore}}</view>
+        <view class="q-question">{{quizQuestions[currentQuizIndex].question}}</view>
+        
+        <view class="q-options">
+          <view 
+            wx:for="{{quizQuestions[currentQuizIndex].options}}" 
+            wx:key="*this"
+            class="q-opt {{quizQuestions[currentQuizIndex].selected === index ? (index === quizQuestions[currentQuizIndex].answer ? 'opt-correct' : 'opt-wrong') : ''}}"
+            bindtap="chooseOption"
+            data-index="{{index}}"
+          >
+            <text class="opt-index">{{index === 0 ? 'A' : (index === 1 ? 'B' : (index === 2 ? 'C' : 'D'))}}.</text>
+            <text class="opt-text">{{item}}</text>
+          </view>
+        </view>
+
+        <view wx:if="{{quizQuestions[currentQuizIndex].selected !== null}}" class="q-explain">
+          <view class="explain-title">💡 非遗文化解析：</view>
+          <view class="explain-text">{{quizQuestions[currentQuizIndex].explained}}</view>
+          <button class="next-btn" bindtap="nextQuestion">
+            {{currentQuizIndex + 1 === quizQuestions.length ? '查看挑战成果' : '下一题 ❯'}}
+          </button>
+        </view>
+      </view>
+
+      <view wx:else class="quiz-result">
+        <view class="result-icon">🏆</view>
+        <view class="result-score">恭喜获得 {{quizScore}} 修为！</view>
+        <view class="result-tip">您对畲族文化底蕴深厚，继续保持！</view>
+        <button class="m-action-btn" bindtap="closeQuiz">太棒了，收下修为</button>
+      </view>
+    </view>
+  </view>
+
+</view>

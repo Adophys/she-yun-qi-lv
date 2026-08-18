@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>设置 - 畲韵奇旅</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&amp;family=Noto+Serif:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "jade-green": "#2A9D8F",
+                        "secondary-container": "#db313f",
+                        "surface-variant": "#e4e2de",
+                        "tertiary-fixed-dim": "#ffb780",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed": "#ffdad8",
+                        "tertiary-fixed": "#ffdcc4",
+                        "primary-container": "#1a2b58",
+                        "surface-container-low": "#f5f3ef",
+                        "silver-metallic": "#C0C0C0",
+                        "inverse-surface": "#30312e",
+                        "surface": "#fbf9f5",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed-variant": "#92001c",
+                        "primary": "#011543",
+                        "on-tertiary-fixed-variant": "#6f3800",
+                        "on-background": "#1b1c1a",
+                        "outline": "#757680",
+                        "surface-container-highest": "#e4e2de",
+                        "on-tertiary-container": "#cf8345",
+                        "on-error": "#ffffff",
+                        "inverse-on-surface": "#f2f0ed",
+                        "background": "#fbf9f5",
+                        "on-error-container": "#93000a",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#8393c7",
+                        "on-primary-fixed-variant": "#354573",
+                        "primary-fixed-dim": "#b5c5fb",
+                        "outline-variant": "#c5c6d0",
+                        "on-primary-fixed": "#041845",
+                        "on-surface-variant": "#45464f",
+                        "on-primary": "#ffffff",
+                        "surface-dim": "#dbdad6",
+                        "inverse-primary": "#b5c5fb",
+                        "on-tertiary-fixed": "#2f1400",
+                        "indigo-wash": "#354A81",
+                        "surface-container": "#efeeea",
+                        "secondary-fixed-dim": "#ffb3b1",
+                        "surface-container-high": "#eae8e4",
+                        "surface-tint": "#4d5d8d",
+                        "on-secondary": "#ffffff",
+                        "tertiary": "#2b1200",
+                        "error": "#ba1a1a",
+                        "tertiary-container": "#4a2300",
+                        "on-secondary-container": "#fffbff",
+                        "surface-bright": "#fbf9f5",
+                        "primary-fixed": "#dbe1ff",
+                        "on-secondary-fixed": "#410007",
+                        "secondary": "#b7102a",
+                        "on-surface": "#1b1c1a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "stack-md": "16px",
+                        "stack-lg": "32px",
+                        "margin-desktop": "24px",
+                        "margin-mobile": "16px",
+                        "stack-sm": "8px",
+                        "gutter": "12px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "label-md": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Noto Serif"],
+                        "headline-lg-mobile": ["Noto Serif"],
+                        "display-lg": ["Noto Serif"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "headline-md": ["Noto Serif"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-lg": ["30px", { "lineHeight": "38px", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
+                        "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["22px", { "lineHeight": "28px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+        }
+        .card-border {
+            border: 0.5px solid rgba(53, 74, 129, 0.1);
+        }
+        .guochao-btn {
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 0 0 theme('colors.primary-fixed-dim');
+        }
+        .guochao-btn::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.05) 10px, rgba(255,255,255,0.05) 20px);
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="antialiased flex flex-col min-h-screen">
+<!-- Header (Transactional Context: Minimal Navigation, Back Action) -->
+<header class="bg-surface dark:bg-surface-dim flex justify-between items-center w-full px-margin-mobile h-16 fixed top-0 z-50 flat no shadows">
+<div class="flex items-center">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed">arrow_back</span>
+</button>
+</div>
+<h1 class="font-headline-md text-headline-md-mobile font-bold text-secondary dark:text-secondary-fixed">设置</h1>
+<div class="w-10 h-10"></div> <!-- Placeholder for balance -->
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-24 pb-stack-lg px-margin-mobile flex flex-col gap-stack-lg max-w-2xl mx-auto w-full">
+<!-- Account Security Section -->
+<section class="flex flex-col gap-stack-sm">
+<h2 class="font-label-md text-label-md text-outline px-2">账号与安全</h2>
+<div class="bg-surface-container-lowest rounded-xl card-border overflow-hidden">
+<button class="w-full flex items-center justify-between p-4 hover:bg-surface-container-low transition-colors">
+<span class="font-body-md text-body-md text-on-surface">修改密码</span>
+<span class="material-symbols-outlined text-outline-variant">chevron_right</span>
+</button>
+<div class="h-[1px] bg-outline-variant/30 mx-4 border-dashed border-b border-outline-variant/50"></div>
+<button class="w-full flex items-center justify-between p-4 hover:bg-surface-container-low transition-colors">
+<span class="font-body-md text-body-md text-on-surface">绑定的手机号</span>
+<div class="flex items-center gap-2">
+<span class="font-body-md text-body-md text-outline">138****8888</span>
+<span class="material-symbols-outlined text-outline-variant">chevron_right</span>
+</div>
+</button>
+<div class="h-[1px] bg-outline-variant/30 mx-4 border-dashed border-b border-outline-variant/50"></div>
+<button class="w-full flex items-center justify-between p-4 hover:bg-surface-container-low transition-colors">
+<span class="font-body-md text-body-md text-on-surface">注销账号</span>
+<span class="material-symbols-outlined text-outline-variant">chevron_right</span>
+</button>
+</div>
+</section>
+<!-- Game Settings Section -->
+<section class="flex flex-col gap-stack-sm">
+<h2 class="font-label-md text-label-md text-outline px-2">游戏设置</h2>
+<div class="bg-surface-container-lowest rounded-xl card-border overflow-hidden">
+<div class="flex items-center justify-between p-4">
+<span class="font-body-md text-body-md text-on-surface">声音效果</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-jade-green"></div>
+</label>
+</div>
+<div class="h-[1px] bg-outline-variant/30 mx-4 border-dashed border-b border-outline-variant/50"></div>
+<div class="flex items-center justify-between p-4">
+<span class="font-body-md text-body-md text-on-surface">消息通知</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-jade-green"></div>
+</label>
+</div>
+</div>
+</section>
+<!-- General Section -->
+<section class="flex flex-col gap-stack-sm">
+<h2 class="font-label-md text-label-md text-outline px-2">通用</h2>
+<div class="bg-surface-container-lowest rounded-xl card-border overflow-hidden">
+<button class="w-full flex items-center justify-between p-4 hover:bg-surface-container-low transition-colors">
+<span class="font-body-md text-body-md text-on-surface">清理缓存</span>
+<span class="font-body-md text-body-md text-outline">128 MB</span>
+</button>
+<div class="h-[1px] bg-outline-variant/30 mx-4 border-dashed border-b border-outline-variant/50"></div>
+<button class="w-full flex items-center justify-between p-4 hover:bg-surface-container-low transition-colors">
+<span class="font-body-md text-body-md text-on-surface">关于我们</span>
+<span class="material-symbols-outlined text-outline-variant">chevron_right</span>
+</button>
+</div>
+</section>
+<!-- Logout Action -->
+<div class="mt-8">
+<button class="w-full py-4 rounded-xl bg-surface-container-lowest border border-error/20 text-error font-label-md text-label-md hover:bg-error-container/10 transition-colors shadow-sm">
+                退出登录
+            </button>
+</div>
+</main>
+<!-- Navigation Shell suppressed because this is a Settings (Transactional/Task) page with a 'Back' action. -->
+</body></html>

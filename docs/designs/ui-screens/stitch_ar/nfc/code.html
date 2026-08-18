@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NFC Cultural Card Unlock Screen</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#efeeea",
+                        "on-tertiary-container": "#cf8345",
+                        "surface-dim": "#dbdad6",
+                        "indigo-wash": "#354A81",
+                        "secondary-fixed-dim": "#ffb3b1",
+                        "silver-metallic": "#C0C0C0",
+                        "on-tertiary": "#ffffff",
+                        "on-surface": "#1b1c1a",
+                        "tertiary-fixed-dim": "#ffb780",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#f5f3ef",
+                        "primary-fixed": "#dbe1ff",
+                        "surface-container-high": "#eae8e4",
+                        "tertiary-container": "#4a2300",
+                        "on-secondary-fixed-variant": "#92001c",
+                        "on-primary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed": "#041845",
+                        "primary": "#011543",
+                        "on-secondary": "#ffffff",
+                        "on-surface-variant": "#45464f",
+                        "tertiary": "#2b1200",
+                        "on-primary-fixed-variant": "#354573",
+                        "background": "#fbf9f5",
+                        "surface-container-highest": "#e4e2de",
+                        "on-secondary-container": "#fffbff",
+                        "on-tertiary-fixed-variant": "#6f3800",
+                        "secondary": "#b7102a",
+                        "primary-fixed-dim": "#b5c5fb",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed": "#410007",
+                        "on-background": "#1b1c1a",
+                        "secondary-container": "#db313f",
+                        "outline-variant": "#c5c6d0",
+                        "surface-tint": "#4d5d8d",
+                        "inverse-surface": "#30312e",
+                        "outline": "#757680",
+                        "surface-bright": "#fbf9f5",
+                        "inverse-primary": "#b5c5fb",
+                        "on-primary-container": "#8393c7",
+                        "on-tertiary-fixed": "#2f1400",
+                        "surface-variant": "#e4e2de",
+                        "inverse-on-surface": "#f2f0ed",
+                        "surface": "#fbf9f5",
+                        "on-error": "#ffffff",
+                        "jade-green": "#2A9D8F",
+                        "secondary-fixed": "#ffdad8",
+                        "tertiary-fixed": "#ffdcc4",
+                        "primary-container": "#1a2b58",
+                        "on-error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-md": "16px",
+                        "stack-lg": "32px",
+                        "margin-desktop": "24px",
+                        "stack-sm": "8px",
+                        "gutter": "12px",
+                        "unit": "4px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Noto Serif"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Noto Serif"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "display-lg": ["Noto Serif"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "headline-md": ["Noto Serif"],
+                        "label-md": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-lg": ["30px", { "lineHeight": "38px", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["22px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .pulse-ring {
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0px 16px 32px rgba(26, 43, 88, 0.12);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col relative overflow-hidden">
+<!-- TopAppBar Semantic Shell -->
+<header class="flex justify-between items-center w-full px-margin-mobile h-16 fixed top-0 z-50 bg-surface dark:bg-surface-dim">
+<div class="flex items-center gap-gutter">
+<div class="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden shadow-sm flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]" data-icon="account_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">account_circle</span>
+</div>
+<h1 class="font-headline-md text-headline-md-mobile font-bold text-secondary dark:text-secondary-fixed tracking-tight">畬韵奇旅</h1>
+</div>
+<div class="flex items-center gap-unit px-3 py-1.5 rounded-full bg-surface-container border border-indigo-wash/10 shadow-sm">
+<span class="text-secondary font-bold text-[14px]">⚡ 1280</span>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col items-center justify-center pt-24 pb-32 px-margin-mobile relative z-10">
+<!-- Background Ambient Elements -->
+<div class="absolute inset-0 z-0 pointer-events-none opacity-40">
+<div class="absolute top-1/4 left-1/4 w-64 h-64 bg-primary-fixed-dim rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-pulse"></div>
+<div class="absolute bottom-1/4 right-1/4 w-72 h-72 bg-tertiary-fixed-dim rounded-full mix-blend-multiply filter blur-3xl opacity-30"></div>
+</div>
+<!-- Header -->
+<div class="text-center mb-stack-lg relative z-10 w-full max-w-md">
+<span class="material-symbols-outlined text-primary text-[48px] mb-stack-sm drop-shadow-sm" data-icon="nfc" data-weight="fill" style="font-variation-settings: 'FILL' 1;">nfc</span>
+<h2 class="font-display-lg text-display-lg text-primary mb-stack-sm drop-shadow-sm">碰一碰，开启隐藏记忆</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-xs mx-auto">
+                将手机靠近NFC文化卡，解锁隐藏故事、限定皮肤及AR内容。
+            </p>
+</div>
+<!-- Interactive Centerpiece: The NFC Card & Phone Simulation -->
+<div class="relative w-full max-w-sm aspect-square flex items-center justify-center z-10 mb-stack-lg" id="nfc-interaction-area">
+<!-- Glow Effect Base -->
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none" id="nfc-glow-container">
+<div class="w-32 h-32 bg-secondary rounded-full filter blur-2xl opacity-0 transition-opacity duration-700 ease-in-out" id="success-glow"></div>
+</div>
+<!-- The Physical Card Representation -->
+<div class="relative w-48 h-72 bg-primary rounded-xl shadow-[0_8px_32px_rgba(1,21,67,0.3)] border border-silver-metallic/30 flex flex-col items-center justify-between p-stack-md transform rotate-[-5deg] z-10 overflow-hidden card-hover" style="background: linear-gradient(135deg, #011543 0%, #1a2b58 100%);">
+<!-- Decorative Border -->
+<div class="absolute inset-2 border-2 border-dashed border-silver-metallic/20 rounded-lg pointer-events-none"></div>
+<!-- Card Header -->
+<div class="w-full text-center mt-2 relative z-10">
+<span class="font-label-sm text-label-sm text-silver-metallic tracking-widest uppercase opacity-80">Artifact</span>
+</div>
+<!-- Central Motif (Phoenix/She Pattern) -->
+<div class="relative w-24 h-24 flex items-center justify-center">
+<img class="absolute inset-0 w-full h-full object-contain opacity-90 drop-shadow-md" data-alt="A meticulously crafted geometric vector illustration of a traditional She ethnic phoenix motif, rendered in shimmering metallic silver against a deep indigo background. The design is sleek, modern, and symmetrical, featuring sharp angles and intricate interwoven lines typical of ethnic embroidery, but updated for a high-tech cultural brand aesthetic. The silver texture catches a soft, warm light." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBo_l9FYFVJK7UHhSx9W5F-dn2E3qTgUkImRi3XFAfjkWZWbLwE2usxb0skqmXX0SbJvRKYKJZxMwXpQZKwLOnTlEFpMyxFjY1yAfvi6S76ug9s9Wr3sLYZnShEhM1zbV0dL8CpdsEWLdFBY6TEvQz0TwwnpYv_IHisPq66rwQeCaYNM80FIZcPBddNogFkpqhgRQGiCwENepPGdbt3T6ckz11sB0wk6YNzcXTDaGmp9yWHsvOknW7J"/>
+<div class="absolute inset-0 bg-silver-metallic opacity-10 rounded-full blur-md"></div>
+</div>
+<!-- Card Footer -->
+<div class="w-full flex justify-between items-end relative z-10">
+<span class="material-symbols-outlined text-silver-metallic text-[24px] opacity-70" data-icon="auto_awesome" data-weight="fill" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-headline-md text-headline-md-mobile text-silver-metallic opacity-90">No. 042</span>
+</div>
+</div>
+<!-- The Smartphone Representation (Animated) -->
+<div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-40 h-80 bg-surface/80 backdrop-blur-md rounded-[32px] border-4 border-surface-container-high shadow-2xl z-20 flex flex-col items-center pt-8 pb-4 px-2 transition-transform duration-1000 ease-in-out" id="smartphone-mockup" style="transform: translate(-10%, -60%) rotate(10deg) scale(1.1);">
+<!-- Phone Screen -->
+<div class="w-full flex-grow bg-surface-container-lowest rounded-2xl overflow-hidden border border-surface-variant flex flex-col items-center justify-center relative shadow-inner">
+<span class="material-symbols-outlined text-primary text-[40px] animate-pulse mb-2" data-icon="contactless" data-weight="fill" style="font-variation-settings: 'FILL' 1;">contactless</span>
+<span class="font-label-md text-label-md text-on-surface-variant">请靠近感应区域</span>
+<!-- Scan line effect -->
+<div class="absolute top-0 left-0 w-full h-1 bg-secondary opacity-50 shadow-[0_0_8px_#b7102a]" style="animation: scan 2s linear infinite;"></div>
+<style>
+                        @keyframes scan {
+                            0% { top: 0; opacity: 0; }
+                            10% { opacity: 1; }
+                            90% { opacity: 1; }
+                            100% { top: 100%; opacity: 0; }
+                        }
+                    </style>
+</div>
+<!-- Home Indicator -->
+<div class="w-12 h-1 bg-outline-variant rounded-full mt-3"></div>
+</div>
+<!-- Interaction Prompt / Overlay -->
+<button class="absolute bottom-[-20px] bg-secondary text-on-secondary px-6 py-3 rounded-full font-label-md text-label-md shadow-lg border-b-2 border-secondary-fixed-dim/50 flex items-center gap-2 hover:bg-secondary-container transition-colors z-30" id="simulate-scan-btn">
+<span class="material-symbols-outlined text-[20px]" data-icon="touch_app" data-weight="fill" style="font-variation-settings: 'FILL' 1;">touch_app</span>
+                立即感应
+            </button>
+</div>
+<!-- Footer / Contextual Information -->
+<div class="w-full max-w-sm bg-surface-container-low rounded-xl p-stack-md border border-indigo-wash/10 shadow-sm relative z-10">
+<div class="flex items-start gap-gutter">
+<div class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center flex-shrink-0 mt-1">
+<span class="material-symbols-outlined text-[20px]" data-icon="location_on" data-weight="fill" style="font-variation-settings: 'FILL' 1;">location_on</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md-mobile text-primary mb-unit">哪里可以获得文化卡？</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                        您可以在畲族文化博物馆、非遗快闪活动或特定村落打卡点获得专属NFC实体卡。
+                    </p>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar Semantic Shell -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-end pb-safe px-2 h-20 shadow-[0px_-4px_16px_rgba(26,43,88,0.08)] bg-surface-container dark:bg-surface-container-lowest rounded-t-xl md:hidden">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant p-2 hover:opacity-80 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform mb-1 text-[24px]" data-icon="home" data-weight="fill" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-sm text-label-sm">村落</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant p-2 hover:opacity-80 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform mb-1 text-[24px]" data-icon="map" data-weight="fill" style="font-variation-settings: 'FILL' 1;">map</span>
+<span class="font-label-sm text-label-sm">探索</span>
+</a>
+<!-- Active Tab: Scan/Explore Context -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-container bg-secondary-fixed-dim/20 rounded-full p-2 hover:opacity-80 scale-90 duration-150 transition-all shadow-sm border border-secondary/10 relative -top-2" href="#">
+<span class="material-symbols-outlined mb-1 text-[28px] animate-pulse" data-icon="center_focus_strong" data-weight="fill" style="font-variation-settings: 'FILL' 1;">center_focus_strong</span>
+<span class="font-label-sm text-label-sm font-bold text-secondary">扫描</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant p-2 hover:opacity-80 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform mb-1 text-[24px]" data-icon="auto_awesome_motion" data-weight="fill" style="font-variation-settings: 'FILL' 1;">auto_awesome_motion</span>
+<span class="font-label-sm text-label-sm">收藏</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant p-2 hover:opacity-80 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform mb-1 text-[24px]" data-icon="person" data-weight="fill" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-label-sm text-label-sm">我的</span>
+</a>
+</nav>
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('simulate-scan-btn');
+            const phone = document.getElementById('smartphone-mockup');
+            const glow = document.getElementById('success-glow');
+            
+            btn.addEventListener('click', () => {
+                // Animate phone down to touch card
+                phone.style.transform = 'translate(-50%, -50%) rotate(0deg) scale(1)';
+                phone.style.boxShadow = '0px 8px 16px rgba(0,0,0,0.2)';
+                
+                // Hide button during simulation
+                btn.style.opacity = '0';
+                btn.style.pointerEvents = 'none';
+
+                setTimeout(() => {
+                    // Trigger success glow
+                    glow.style.opacity = '0.8';
+                    glow.classList.add('pulse-ring');
+                    
+                    // Optional: Change phone screen state
+                    const phoneScreenText = phone.querySelector('span.text-label-md');
+                    const phoneScreenIcon = phone.querySelector('span.material-symbols-outlined');
+                    if(phoneScreenText) phoneScreenText.textContent = "Unlocked!";
+                    if(phoneScreenIcon) {
+                        phoneScreenIcon.textContent = "check_circle";
+                        phoneScreenIcon.classList.remove('animate-pulse');
+                        phoneScreenIcon.classList.add('text-jade-green');
+                    }
+
+                    setTimeout(() => {
+                        // Reset after showing success
+                        glow.style.opacity = '0';
+                        glow.classList.remove('pulse-ring');
+                        phone.style.transform = 'translate(-10%, -60%) rotate(10deg) scale(1.1)';
+                        phone.style.boxShadow = '';
+                        btn.style.opacity = '1';
+                        btn.style.pointerEvents = 'auto';
+                        
+                        if(phoneScreenText) phoneScreenText.textContent = "请靠近感应区域";
+                        if(phoneScreenIcon) {
+                            phoneScreenIcon.textContent = "contactless";
+                            phoneScreenIcon.classList.add('animate-pulse');
+                            phoneScreenIcon.classList.remove('text-jade-green');
+                        }
+                    }, 2500);
+                }, 800);
+            });
+        });
+    </script>
+</body></html>
