@@ -4,7 +4,7 @@ from sqlalchemy import select
 
 from app.core.config import get_settings
 from app.core.logging import configure_logging, get_logger
-from app.db.session import AsyncSessionLocal, create_tables
+from app.db.session import AsyncSessionLocal, verify_db_connection
 from app.models.accounts import AdminUser
 from app.services.security import hash_password
 
@@ -13,10 +13,13 @@ logger = get_logger(__name__)
 
 
 async def init_db() -> None:
-    await create_tables()
+    # schema 由 Alembic 管理（uv run alembic upgrade head），此处仅初始化种子数据
+    await verify_db_connection()
     settings = get_settings()
     async with AsyncSessionLocal() as session:
-        result = await session.execute(select(AdminUser).where(AdminUser.username == settings.initial_admin_username))
+        result = await session.execute(
+            select(AdminUser).where(AdminUser.username == settings.initial_admin_username)
+        )
         if result.scalar_one_or_none() is None:
             admin = AdminUser(
                 username=settings.initial_admin_username,

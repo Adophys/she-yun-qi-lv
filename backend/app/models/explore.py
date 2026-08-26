@@ -1,4 +1,6 @@
-from sqlalchemy import ForeignKey, Integer, String, Text
+from datetime import datetime
+
+from sqlalchemy import DateTime, ForeignKey, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Base
@@ -25,3 +27,17 @@ class ExploreNode(Base, UUIDPrimaryKeyMixin, TimestampMixin):
     sort_order: Mapped[int] = mapped_column(default=0, comment="排序")
     puzzle_image_url: Mapped[str | None] = mapped_column(String(512), comment="拼图底图")
     puzzle_pieces: Mapped[int] = mapped_column(default=9, comment="拼图块数")
+
+
+class UserExploreProgress(Base, UUIDPrimaryKeyMixin, TimestampMixin):
+    """用户探索节点进度（拼图关卡记录）"""
+
+    __tablename__ = "user_explore_progress"
+    __table_args__ = (
+        UniqueConstraint("user_id", "node_id", name="uq_user_explore_progress_user_node"),
+    )
+
+    user_id: Mapped[str] = mapped_column(ForeignKey("user.id"), comment="用户 ID")
+    node_id: Mapped[str] = mapped_column(ForeignKey("explore_node.id"), comment="探索节点 ID")
+    status: Mapped[NodeStatus] = mapped_column(default=NodeStatus.ACTIVE, comment="节点进度状态")
+    completed_at: Mapped[datetime | None] = mapped_column(DateTime, comment="完成时间")

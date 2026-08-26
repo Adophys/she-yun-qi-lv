@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Integer, String, Text
+from sqlalchemy import ForeignKey, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Base
@@ -21,3 +21,17 @@ class CulturalItem(Base, UUIDPrimaryKeyMixin, TimestampMixin):
     audio_url: Mapped[str | None] = mapped_column(String(512), comment="音频 URL")
     sort_order: Mapped[int] = mapped_column(default=0, comment="排序")
     is_published: Mapped[bool] = mapped_column(default=True, comment="是否发布")
+
+
+class UserCollection(Base, UUIDPrimaryKeyMixin, TimestampMixin):
+    """用户已收集的文化条目（图鉴收藏记录）"""
+
+    __tablename__ = "user_collection"
+    __table_args__ = (
+        UniqueConstraint("user_id", "cultural_item_id", name="uq_user_collection_user_item"),
+    )
+
+    user_id: Mapped[str] = mapped_column(ForeignKey("user.id"), comment="用户 ID")
+    cultural_item_id: Mapped[str] = mapped_column(
+        ForeignKey("cultural_item.id"), comment="文化条目 ID"
+    )

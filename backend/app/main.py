@@ -8,15 +8,13 @@ from app.api.v1.router import api_v1_router
 from app.core.config import get_settings
 from app.core.logging import configure_logging
 from app.core.middleware import RequestContextMiddleware
-from app.db.session import create_tables
+from app.db.session import verify_db_connection
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    settings = get_settings()
     configure_logging()
-    if settings.app_env in ("local", "test"):
-        await create_tables()
+    await verify_db_connection()  # schema 由 Alembic 管理，此处仅校验连接
     yield
 
 

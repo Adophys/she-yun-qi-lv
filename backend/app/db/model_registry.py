@@ -2,4 +2,11 @@
 
 
 def import_all_models() -> None:
-    from app.models import accounts, achievements, cultural, explore, wardrobe  # noqa: F401
+    from app.models import (  # noqa: F401
+        accounts,
+        achievements,
+        cultural,
+        explore,
+        shop,
+        wardrobe,
+    )

@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict
@@ -24,7 +24,7 @@ class ApiModel(BaseModel):
     @staticmethod
     def _serialize_datetime(value: Any) -> Any:
         if isinstance(value, datetime):
-            return value.astimezone(timezone.utc).isoformat()
+            return value.astimezone(UTC).isoformat()
         if isinstance(value, dict):
             return {k: ApiModel._serialize_datetime(v) for k, v in value.items()}
         if isinstance(value, list):

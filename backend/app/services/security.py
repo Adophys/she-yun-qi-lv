@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 import jwt
 from pwdlib import PasswordHash
@@ -29,7 +29,7 @@ def create_access_token(subject: str, domain: str, settings: Settings | None = N
         audience = settings.admin_jwt_audience
         ttl = settings.access_token_ttl_minutes
 
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     payload = {
         "sub": subject,
         "iss": issuer,

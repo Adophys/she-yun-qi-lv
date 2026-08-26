@@ -1,17 +1,19 @@
-from datetime import datetime, timezone
-from typing import Generic, TypeVar
+from datetime import UTC, datetime
+from typing import TypeVar
 
 from pydantic import BaseModel, Field
 
 T = TypeVar("T")
 
 
-class ApiResponse(BaseModel, Generic[T]):
+class ApiResponse[T](BaseModel):
     code: str = "SUCCESS"
     message: str = "ok"
     data: T | None = None
     request_id: str = Field(default="", alias="requestId")
-    server_time: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat(), alias="serverTime")
+    server_time: str = Field(
+        default_factory=lambda: datetime.now(UTC).isoformat(), alias="serverTime"
+    )
 
     @classmethod
     def ok(cls, data: T | None = None, message: str = "ok") -> "ApiResponse[T]":
