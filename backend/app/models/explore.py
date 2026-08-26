@@ -27,6 +27,12 @@ class ExploreNode(Base, UUIDPrimaryKeyMixin, TimestampMixin):
     sort_order: Mapped[int] = mapped_column(default=0, comment="排序")
     puzzle_image_url: Mapped[str | None] = mapped_column(String(512), comment="拼图底图")
     puzzle_pieces: Mapped[int] = mapped_column(default=9, comment="拼图块数")
+    code: Mapped[str | None] = mapped_column(
+        String(64), unique=True, comment="二维码/NFC 码值（扫码识别用）"
+    )
+    cultural_item_id: Mapped[str | None] = mapped_column(
+        ForeignKey("cultural_item.id"), comment="绑定解锁的文化卡片 ID"
+    )
 
 
 class UserExploreProgress(Base, UUIDPrimaryKeyMixin, TimestampMixin):

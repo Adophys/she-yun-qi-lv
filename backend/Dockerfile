@@ -11,8 +11,10 @@ COPY pyproject.toml ./
 # Install production dependencies
 RUN uv sync --frozen --no-dev
 
-# Copy application code
+# Copy application code + alembic 迁移
 COPY app/ ./app/
+COPY alembic.ini ./
+COPY alembic/ ./alembic/
 
 # Create non-root user
 RUN groupadd -r syql && useradd -r -g syql syql && chown -R syql:syql /app

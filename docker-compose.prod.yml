@@ -13,6 +13,11 @@ x-backend-environment: &backend-environment
   REFRESH_TOKEN_TTL_DAYS: ${REFRESH_TOKEN_TTL_DAYS:-7}
   INITIAL_ADMIN_USERNAME: ${INITIAL_ADMIN_USERNAME:-admin}
   INITIAL_ADMIN_PASSWORD: ${INITIAL_ADMIN_PASSWORD}
+  # 微信小程序（资质办齐后填真实值）
+  WECHAT_APPID: ${WECHAT_APPID:-}
+  WECHAT_SECRET: ${WECHAT_SECRET:-}
+  # 商城真实支付 feature flag：资质未办齐前保持 false（前端降级为意向收集）
+  SHOP_PAYMENT_ENABLED: ${SHOP_PAYMENT_ENABLED:-false}
 
 services:
   postgres:
@@ -38,7 +43,7 @@ services:
       dockerfile: Dockerfile
     environment:
       <<: *backend-environment
-    command: ["python", "-m", "app.commands.bootstrap_db"]
+    command: ["sh", "-c", "uv run alembic upgrade head && uv run python -m app.commands.bootstrap_db"]
     depends_on:
       postgres:
         condition: service_healthy

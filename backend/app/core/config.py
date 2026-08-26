@@ -27,6 +27,13 @@ class Settings(BaseSettings):
     initial_admin_username: str = Field(default="admin", alias="INITIAL_ADMIN_USERNAME")
     initial_admin_password: str = Field(default="admin123", alias="INITIAL_ADMIN_PASSWORD")
 
+    # 微信小程序（code2session）；未配置时 wx-login 走 mock 模式（本地联调用）
+    wechat_app_id: str | None = Field(default=None, alias="WECHAT_APPID")
+    wechat_secret: str | None = Field(default=None, alias="WECHAT_SECRET")
+
+    # 商城真实支付 feature flag：资质未办齐时保持 false（前端提示意向收集）
+    shop_payment_enabled: bool = Field(default=False, alias="SHOP_PAYMENT_ENABLED")
+
     @model_validator(mode="after")
     def check_secrets(self):
         if self.app_env == "production":
@@ -41,4 +48,5 @@ class Settings(BaseSettings):
 
 @lru_cache
 def get_settings() -> Settings:
-    return Settings()
+    # pydantic-settings 动态字段在 mypy 下误报缺参数，属已知问题
+    return Settings()  # type: ignore[call-arg]

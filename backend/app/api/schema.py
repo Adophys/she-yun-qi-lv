@@ -1,5 +1,5 @@
 from datetime import UTC, datetime
-from typing import Any
+from typing import Any, cast
 
 from pydantic import BaseModel, ConfigDict
 
@@ -19,7 +19,7 @@ class ApiModel(BaseModel):
     def model_dump(self, **kwargs) -> dict[str, Any]:
         kwargs.setdefault("by_alias", True)
         data = super().model_dump(**kwargs)
-        return self._serialize_datetime(data)
+        return cast(dict[str, Any], self._serialize_datetime(data))
 
     @staticmethod
     def _serialize_datetime(value: Any) -> Any:

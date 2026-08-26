@@ -53,12 +53,17 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "W", "UP", "B", "C4", "SIM"]
+# N815: API 响应模型字段按契约约定使用 camelCase（与 ApiModel alias 机制一致）
+# B008: FastAPI 依赖默认值 Query(...)/Depends(...) 的标准写法，属误报
+ignore = ["N815", "B008"]
 
 [tool.mypy]
 python_version = "3.12"
 strict = true
 warn_return_any = true
 warn_unused_ignores = true
+# no-untyped-def: FastAPI handler 返回类型已由 response_model 约束，豁免缺注解
+disable_error_code = ["no-untyped-def"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
