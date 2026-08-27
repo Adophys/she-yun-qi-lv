@@ -1,14 +1,14 @@
 <template>
-  <div class="items-view">
+  <div class="users-view">
     <!-- 页头 -->
     <div class="page-header">
       <div>
-        <h2>文化图鉴</h2>
-        <p class="page-desc">管理小程序中展示的畲族文化条目</p>
+        <h2>用户管理</h2>
+        <p class="page-desc">管理后台的管理员账号、角色与登录权限</p>
       </div>
       <button class="btn btn-primary" :disabled="loading" @click="openModal('create')">
         <Plus :size="16" />
-        新增条目
+        新增账号
       </button>
     </div>
 
@@ -18,23 +18,13 @@
         v-model="filters.keyword"
         type="text"
         class="filter-input search-input"
-        placeholder="搜索名称 / 拼音"
+        placeholder="搜索账号 / 姓名 / 手机号"
         @keyup.enter="search"
       />
-      <select v-model="filters.category" class="filter-input">
-        <option value="">全部分类</option>
-        <option v-for="c in categoryOptions" :key="c" :value="c">{{ c }}</option>
-      </select>
-      <select v-model="filters.rarity" class="filter-input">
-        <option value="">全部稀有度</option>
-        <option v-for="(label, value) in CULTURAL_RARITIES" :key="value" :value="value">
-          {{ label }}
-        </option>
-      </select>
       <select v-model="filters.status" class="filter-input">
         <option value="">全部状态</option>
-        <option value="published">已上架</option>
-        <option value="draft">已下架</option>
+        <option value="active">已启用</option>
+        <option value="inactive">已禁用</option>
       </select>
       <button class="btn btn-primary btn-sm" @click="search">
         <Search :size="14" />
@@ -60,45 +50,39 @@
 
     <!-- 列表 -->
     <div v-else class="table-wrap panel">
-      <table class="item-table">
+      <table class="user-table">
         <thead>
           <tr>
-            <th>图鉴</th>
-            <th>名称</th>
-            <th>分类</th>
-            <th>稀有度</th>
-            <th>浏览量</th>
+            <th>账号</th>
+            <th>真实姓名</th>
+            <th>手机号</th>
+            <th>角色</th>
             <th>状态</th>
             <th>创建时间</th>
             <th class="col-actions">操作</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in items" :key="item.id">
+          <tr v-for="item in visibleAccounts" :key="item.id">
             <td>
-              <img :src="item.image" class="thumb" alt="" />
+              <div class="cell-name">{{ item.username }}</div>
+              <div class="cell-sub">{{ item.id }}</div>
             </td>
             <td>
-              <div class="cell-name">{{ item.name }}</div>
-              <div class="cell-pinyin">{{ item.pinyin || '—' }}</div>
+              <div class="cell-user">
+                <span class="mini-avatar">{{ avatarChar(item.realName) }}</span>
+                <span>{{ item.realName || '—' }}</span>
+              </div>
             </td>
+            <td class="cell-phone">{{ item.phone || '—' }}</td>
             <td>
-              <span class="chip chip-category">{{ item.category }}</span>
-            </td>
-            <td>
-              <span class="chip rarity" :class="`rarity-${item.rarity}`">
-                {{ rarityText(item.rarity) }}
+              <span class="chip" :class="`role-${item.role}`">
+                {{ roleText(item.role) }}
               </span>
             </td>
             <td>
-              <span class="cell-views">
-                <Eye :size="14" />
-                {{ item.viewCount.toLocaleString() }}
-              </span>
-            </td>
-            <td>
-              <span class="status-tag" :class="item.isPublished ? 'on' : 'off'">
-                {{ item.isPublished ? '已上架' : '已下架' }}
+              <span class="status-tag" :class="item.isActive ? 'on' : 'off'">
+                {{ item.isActive ? '已启用' : '已禁用' }}
               </span>
             </td>
             <td class="cell-time">{{ formatDate(item.createdAt) }}</td>
@@ -106,25 +90,32 @@
               <div class="row-actions">
                 <button
                   class="icon-btn"
-                  :title="item.isPublished ? '下架' : '上架'"
+                  :disabled="item.role === 'super_admin'"
+                  :title="
+                    item.role === 'super_admin'
+                      ? '超级管理员不由本页面管辖'
+                      : item.isActive
+                        ? '禁用账号'
+                        : '启用账号'
+                  "
                   @click="toggleStatus(item)"
                 >
-                  <component :is="item.isPublished ? EyeOff : Eye" :size="15" />
+                  <component :is="item.isActive ? UserX : UserCheck" :size="15" />
                 </button>
-                <button class="icon-btn" title="编辑" @click="openModal('edit', item)">
+                <button
+                  class="icon-btn"
+                  :disabled="item.role === 'super_admin'"
+                  :title="item.role === 'super_admin' ? '超级管理员不由本页面管辖' : '编辑'"
+                  @click="openModal('edit', item)"
+                >
                   <Pencil :size="15" />
-                </button>
-                <button class="icon-btn danger" title="删除" @click="removeItem(item)">
-                  <Trash2 :size="15" />
                 </button>
               </div>
             </td>
           </tr>
-          <tr v-if="items.length === 0">
-            <td colspan="8" class="empty-cell">
-              <div class="empty-tip">
-                暂无匹配的图鉴条目，试试调整筛选条件
-              </div>
+          <tr v-if="visibleAccounts.length === 0">
+            <td colspan="7" class="empty-cell">
+              <div class="empty-tip">暂无数据</div>
             </td>
           </tr>
         </tbody>
@@ -133,7 +124,7 @@
       <!-- 分页 -->
       <div class="pagination">
         <span class="pagination-info">
-          共 {{ total }} 条 · 第 {{ page }} / {{ totalPages }} 页
+          共 {{ visibleTotal }} 条 · 第 {{ page }} / {{ totalPages }} 页
         </span>
         <div class="pagination-btns">
           <button
@@ -156,7 +147,7 @@
 
     <!-- ── 新增 / 编辑模态框 ── -->
     <div v-if="modal.visible" class="modal-mask" @click.self="closeModal">
-      <div class="modal-card wide">
+      <div class="modal-card">
         <div class="modal-header">
           <h3>{{ modal.title }}</h3>
           <button class="icon-btn" title="关闭" @click="closeModal">
@@ -167,91 +158,71 @@
         <form class="modal-form" @submit.prevent="submitForm">
           <div class="form-row">
             <div class="form-field">
-              <label>名称 <em>*</em></label>
-              <input v-model="form.name" type="text" placeholder="例如：凤凰装" required />
+              <label>登录账号 <em>*</em></label>
+              <input
+                v-model="form.username"
+                type="text"
+                placeholder="例如：lei.xiaoyun"
+                required
+              />
             </div>
             <div class="form-field">
-              <label>拼音</label>
-              <input v-model="form.pinyin" type="text" placeholder="例如：fenghuangzhuang" />
+              <label>真实姓名 <em>*</em></label>
+              <input v-model="form.realName" type="text" placeholder="例如：雷晓云" required />
             </div>
           </div>
 
           <div class="form-row">
             <div class="form-field">
-              <label>分类 <em>*</em></label>
+              <label>手机号 <em>*</em></label>
               <input
-                v-model="form.category"
-                type="text"
-                list="category-options"
-                placeholder="选择或输入分类"
+                v-model="form.phone"
+                type="tel"
+                maxlength="11"
+                placeholder="11 位手机号"
                 required
               />
-              <datalist id="category-options">
-                <option v-for="c in categoryOptions" :key="c" :value="c" />
-              </datalist>
             </div>
             <div class="form-field">
-              <label>稀有度</label>
-              <select v-model="form.rarity">
-                <option v-for="(label, value) in CULTURAL_RARITIES" :key="value" :value="value">
+              <label>角色 <em>*</em></label>
+              <select v-model="form.role" :disabled="isSuperEditing">
+                <option v-if="isSuperEditing" :value="form.role">
+                  {{ roleText(form.role) }}
+                </option>
+                <option v-for="(label, value) in roleOptions" :key="value" :value="value">
                   {{ label }}
                 </option>
               </select>
+              <span v-if="isSuperEditing" class="form-tip">
+                超级管理员不由本页面管辖，仅可查看
+              </span>
             </div>
           </div>
 
           <div class="form-row">
             <div class="form-field">
-              <label>地区</label>
-              <input v-model="form.origin" type="text" placeholder="例如：福建宁德" />
+              <label>
+                登录密码 <em v-if="modal.mode === 'create'">*</em>
+              </label>
+              <input
+                v-model="form.password"
+                type="text"
+                :placeholder="modal.mode === 'create' ? '至少 6 位' : '留空表示不修改密码'"
+                :required="modal.mode === 'create'"
+              />
             </div>
             <div class="form-field">
               <label>状态</label>
-              <select v-model="form.isPublished">
-                <option :value="true">上架</option>
-                <option :value="false">下架</option>
+              <select v-model="form.isActive">
+                <option :value="true">启用</option>
+                <option :value="false">禁用</option>
               </select>
             </div>
-          </div>
-
-          <div class="form-field">
-            <label>描述</label>
-            <textarea
-              v-model="form.description"
-              rows="3"
-              placeholder="简要描述该文化条目的背景与特色"
-            ></textarea>
-          </div>
-
-          <div class="form-field">
-            <label>图片</label>
-            <div class="upload-box" @click="pickFile">
-              <img v-if="form.image" :src="form.image" class="upload-preview" alt="图片预览" />
-              <div v-else class="upload-placeholder">
-                <Upload :size="22" />
-                <span>点击选择图片（≤ 5MB）</span>
-              </div>
-              <input
-                ref="fileInput"
-                type="file"
-                accept="image/*"
-                class="upload-input"
-                @change="handleFileChange"
-              />
-            </div>
-            <div v-if="form.image" class="upload-actions">
-              <button type="button" class="btn btn-outline btn-sm" @click="pickFile">更换图片</button>
-              <button type="button" class="btn btn-danger btn-sm" @click="form.image = ''">移除</button>
-            </div>
-            <p v-if="uploading" class="uploading-tip">
-              <span class="spinner"></span>
-              上传中...
-            </p>
           </div>
 
           <div class="modal-actions">
             <button type="button" class="btn btn-outline" @click="closeModal">取消</button>
-            <button type="submit" class="btn btn-primary" :disabled="modal.saving || uploading">
+            <button type="submit" class="btn btn-primary" :disabled="modal.saving">
               {{ modal.saving ? '保存中...' : '保存' }}
             </button>
           </div>
@@ -263,17 +234,15 @@
 
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue'
-import { Plus, Pencil, Trash2, X, Eye, EyeOff, Search, RotateCcw, Upload } from 'lucide-vue-next'
+import { Plus, Pencil, X, Search, RotateCcw, UserCheck, UserX } from 'lucide-vue-next'
 import {
-  getItems,
-  createItem,
-  updateItem,
-  toggleItemStatus,
-  deleteItem,
-  uploadImage,
-} from '@/api/culturalItems'
-import type { CulturalItem, CulturalItemPayload } from '@/types/admin'
-import { CULTURAL_RARITIES } from '@/types/admin'
+  getAdminAccounts,
+  createAdminAccount,
+  updateAdminAccount,
+  toggleAdminAccountStatus,
+} from '@/api/adminUsers'
+import type { AdminAccount, AdminAccountPayload, AdminRole } from '@/types/admin'
+import { ADMIN_ROLES } from '@/types/admin'
 
 // ── 常量 ───────────────────────────────────────────────────────
 
@@ -284,26 +253,21 @@ const PAGE_SIZE = 8
 const loading = ref(true)
 const loadError = ref('')
 
-const items = ref<CulturalItem[]>([])
+const accounts = ref<AdminAccount[]>([])
 const total = ref(0)
 const page = ref(1)
-const totalPages = computed(() => Math.max(1, Math.ceil(total.value / PAGE_SIZE)))
 
-/**
- * 分类下拉选项：从列表数据中动态提取去重，不写死分类。
- * 空数据时自动为空列表（下拉只剩"全部分类"）；
- * 对接后端后自动跟随真实分类，无需改动页面代码。
- */
-const categoryOptions = computed<string[]>(() => {
-  return Array.from(new Set(items.value.map((i) => i.category).filter(Boolean)))
-})
+/** 本页只管辖普通用户（editor）；超级管理员条目从展示层过滤 */
+const visibleAccounts = computed(() =>
+  accounts.value.filter((a) => a.role !== 'super_admin'),
+)
+const visibleTotal = computed(() => visibleAccounts.value.length)
+const totalPages = computed(() => Math.max(1, Math.ceil(visibleTotal.value / PAGE_SIZE)))
 
 /** 筛选条件（触发查询时同步到请求） */
 const filters = reactive({
   keyword: '',
-  category: '',
-  rarity: '',
-  status: '' as '' | 'published' | 'draft',
+  status: '' as '' | 'active' | 'inactive',
 })
 
 // ── 模态框 ─────────────────────────────────────────────────────
@@ -317,18 +281,23 @@ const modal = reactive({
 
 const form = reactive({
   id: '',
-  name: '',
-  pinyin: '',
-  category: '',
-  rarity: 'common',
-  origin: '',
-  description: '',
-  image: '',
-  isPublished: false,
+  username: '',
+  realName: '',
+  phone: '',
+  role: 'editor' as AdminRole,
+  password: '',
+  isActive: true,
 })
 
-const fileInput = ref<HTMLInputElement | null>(null)
-const uploading = ref(false)
+/** 本页面只管理普通用户（editor）；超级管理员不归本页管辖，从可选项剔除 */
+const roleOptions = computed<Record<string, string>>(() =>
+  Object.fromEntries(
+    Object.entries(ADMIN_ROLES).filter(([value]) => value !== 'super_admin'),
+  ),
+)
+
+/** 编辑对象为超级管理员时，角色下拉只读展示 */
+const isSuperEditing = computed(() => form.role === 'super_admin')
 
 // ── 数据加载 ───────────────────────────────────────────────────
 
@@ -336,19 +305,17 @@ async function loadData() {
   loading.value = true
   loadError.value = ''
   try {
-    const result = await getItems({
+    const result = await getAdminAccounts({
       page: page.value,
       pageSize: PAGE_SIZE,
       keyword: filters.keyword.trim() || undefined,
-      category: filters.category || undefined,
-      rarity: filters.rarity || undefined,
       status: filters.status || undefined,
     })
-    items.value = result.items
+    accounts.value = result.items
     total.value = result.total
   } catch (error) {
-    loadError.value = error instanceof Error ? error.message : '图鉴数据加载失败'
-    console.error('[CulturalItems] 加载失败 →', error)
+    loadError.value = error instanceof Error ? error.message : '管理员账号加载失败'
+    console.error('[UserManage] 加载失败 →', error)
   } finally {
     loading.value = false
   }
@@ -362,8 +329,6 @@ function search() {
 
 function resetFilters() {
   filters.keyword = ''
-  filters.category = ''
-  filters.rarity = ''
   filters.status = ''
   search()
 }
@@ -376,118 +341,98 @@ function changePage(target: number) {
 
 // ── 新增 / 编辑 ────────────────────────────────────────────────
 
-function openModal(mode: 'create' | 'edit', item?: CulturalItem) {
+function openModal(mode: 'create' | 'edit', item?: AdminAccount) {
   form.id = item?.id ?? ''
-  form.name = item?.name ?? ''
-  form.pinyin = item?.pinyin ?? ''
-  form.category = item?.category ?? ''
-  form.rarity = item?.rarity ?? 'common'
-  form.origin = item?.origin ?? ''
-  form.description = item?.description ?? ''
-  form.image = item?.image ?? ''
-  form.isPublished = item?.isPublished ?? false
+  form.username = item?.username ?? ''
+  form.realName = item?.realName ?? ''
+  form.phone = item?.phone ?? ''
+  form.role = item?.role ?? 'editor'
+  form.password = ''
+  form.isActive = item?.isActive ?? true
 
   modal.mode = mode
-  modal.title = mode === 'create' ? '新增图鉴条目' : '编辑图鉴条目'
+  modal.title = mode === 'create' ? '新增管理员账号' : '编辑管理员账号'
   modal.visible = true
 }
 
 async function submitForm() {
-  if (!form.name.trim() || !form.category.trim()) return
+  const username = form.username.trim()
+  const realName = form.realName.trim()
+  const phone = form.phone.trim()
+  const password = form.password
+
+  if (!username || !realName || !phone) return
+  if (form.role === 'super_admin') {
+    window.alert('超级管理员账号不由本页面管辖，无法在此保存')
+    return
+  }
+  if (!/^1\d{10}$/.test(phone)) {
+    window.alert('请输入正确的 11 位手机号')
+    return
+  }
+  if (modal.mode === 'create' && password.length < 6) {
+    window.alert('登录密码至少 6 位')
+    return
+  }
+  if (modal.mode === 'edit' && password && password.length < 6) {
+    window.alert('登录密码至少 6 位（留空表示不修改）')
+    return
+  }
+
   modal.saving = true
   try {
-    const payload: CulturalItemPayload = {
-      name: form.name.trim(),
-      pinyin: form.pinyin.trim(),
-      category: form.category.trim(),
-      rarity: form.rarity,
-      origin: form.origin.trim(),
-      description: form.description.trim(),
-      image: form.image,
-      isPublished: form.isPublished,
+    const payload: AdminAccountPayload = {
+      username,
+      realName,
+      phone,
+      role: form.role,
+      isActive: form.isActive,
+      ...(password ? { password } : {}),
     }
     if (modal.mode === 'create') {
-      await createItem(payload)
+      await createAdminAccount(payload)
     } else {
-      await updateItem(form.id, payload)
+      await updateAdminAccount(form.id, payload)
     }
     closeModal()
     await loadData()
   } catch (error) {
-    console.error('[CulturalItems] 保存失败 →', error)
+    console.error('[UserManage] 保存失败 →', error)
+    window.alert(error instanceof Error ? error.message : '保存失败，请稍后重试')
   } finally {
     modal.saving = false
   }
 }
 
-// ── 上下架 / 删除 ──────────────────────────────────────────────
+// ── 启用 / 禁用 ────────────────────────────────────────────────
 
-async function toggleStatus(item: CulturalItem) {
+async function toggleStatus(item: AdminAccount) {
+  const action = item.isActive ? '禁用' : '启用'
+  if (!window.confirm(`确定${action}账号「${item.username}」吗？`)) return
   try {
-    await toggleItemStatus(item.id, !item.isPublished)
-    item.isPublished = !item.isPublished
+    const updated = await toggleAdminAccountStatus(item.id, !item.isActive)
+    item.isActive = updated.isActive
   } catch (error) {
-    console.error('[CulturalItems] 切换状态失败 →', error)
-  }
-}
-
-async function removeItem(item: CulturalItem) {
-  if (!window.confirm(`确定删除「${item.name}」吗？此操作不可恢复！`)) return
-  try {
-    await deleteItem(item.id)
-    // 当前页删空则回退一页
-    if (items.value.length === 1 && page.value > 1) {
-      page.value -= 1
-    }
-    await loadData()
-  } catch (error) {
-    console.error('[CulturalItems] 删除失败 →', error)
-  }
-}
-
-// ── 图片上传 ───────────────────────────────────────────────────
-
-function pickFile() {
-  fileInput.value?.click()
-}
-
-async function handleFileChange(event: Event) {
-  const input = event.target as HTMLInputElement
-  const file = input.files?.[0]
-  input.value = '' // 允许重复选择同一文件
-  if (!file) return
-
-  if (!file.type.startsWith('image/')) {
-    window.alert('请选择图片文件')
-    return
-  }
-  if (file.size > 5 * 1024 * 1024) {
-    window.alert('图片大小不能超过 5MB')
-    return
-  }
-
-  uploading.value = true
-  try {
-    const result = await uploadImage(file)
-    form.image = result.url
-  } catch (error) {
-    console.error('[CulturalItems] 上传失败 →', error)
-    window.alert(error instanceof Error ? error.message : '图片上传失败')
-  } finally {
-    uploading.value = false
+    console.error('[UserManage] 切换状态失败 →', error)
+    window.alert(error instanceof Error ? error.message : '操作失败，请稍后重试')
   }
 }
 
 // ── 展示工具 ───────────────────────────────────────────────────
 
-/** 稀有度文案：从类型契约层取，未知值兜底显示原始值 */
-function rarityText(rarity: string): string {
-  return CULTURAL_RARITIES[rarity] ?? rarity
+/** 角色文案：从类型契约层取，未知值兜底显示原始值 */
+function roleText(role: AdminRole): string {
+  return ADMIN_ROLES[role] ?? role
+}
+
+/** 姓名首字（头像占位） */
+function avatarChar(name: string): string {
+  return (name || 'U').charAt(0).toUpperCase()
 }
 
 function formatDate(iso: string): string {
   const d = new Date(iso)
-  if (Number.isNaN(d.getTime())) return iso
+  if (Number.isNaN(d.getTime())) return iso || '—'
   const y = d.getFullYear()
   const m = String(d.getMonth() + 1).padStart(2, '0')
   const day = String(d.getDate()).padStart(2, '0')
@@ -526,7 +471,7 @@ onMounted(loadData)
   color: var(--color-text-secondary);
 }
 
-/* ── 通用按钮（与章节页一致） ───────────────────────────── */
+/* ── 通用按钮（与图鉴页一致） ───────────────────────────── */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -563,16 +508,6 @@ onMounted(loadData)
 
 .btn-outline:hover:not(:disabled) {
   background: rgba(139, 30, 63, 0.06);
-}
-
-.btn-danger {
-  color: #c62828;
-  background: transparent;
-  border: 1px solid #e57373;
-}
-
-.btn-danger:hover:not(:disabled) {
-  background: rgba(229, 57, 53, 0.06);
 }
 
 .btn-sm {
@@ -656,13 +591,13 @@ onMounted(loadData)
   overflow: hidden;
 }
 
-.item-table {
+.user-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 13px;
 }
 
-.item-table th {
+.user-table th {
   text-align: left;
   padding: 10px 12px;
   font-size: 12px;
@@ -673,30 +608,22 @@ onMounted(loadData)
   white-space: nowrap;
 }
 
-.item-table td {
+.user-table td {
   padding: 10px 12px;
   border-bottom: 1px solid var(--color-border);
   vertical-align: middle;
 }
 
-.item-table tbody tr {
+.user-table tbody tr {
   transition: background 0.15s;
 }
 
-.item-table tbody tr:hover {
+.user-table tbody tr:hover {
   background: rgba(139, 30, 63, 0.03);
 }
 
 .col-actions {
-  width: 120px;
-}
-
-.thumb {
-  width: 52px;
-  height: 40px;
-  object-fit: cover;
-  border-radius: 6px;
-  display: block;
+  width: 90px;
 }
 
 .cell-name {
@@ -704,9 +631,35 @@ onMounted(loadData)
   color: var(--color-text);
 }
 
-.cell-pinyin {
+.cell-sub {
   font-size: 11px;
   color: var(--color-text-secondary);
+}
+
+.cell-user {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text);
+}
+
+.mini-avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(139, 30, 63, 0.1);
+  color: var(--color-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.cell-phone {
+  color: var(--color-text);
+  white-space: nowrap;
 }
 
 .chip {
@@ -717,33 +670,14 @@ onMounted(loadData)
   white-space: nowrap;
 }
 
-.chip-category {
-  color: var(--color-primary);
-  background: rgba(139, 30, 63, 0.08);
+.role-super_admin {
+  color: #8b1e3f;
+  background: rgba(139, 30, 63, 0.1);
 }
 
-.rarity-common {
-  color: #616161;
-  background: rgba(97, 97, 97, 0.1);
-}
-
-.rarity-rare {
+.role-editor {
   color: #1565c0;
   background: rgba(21, 101, 192, 0.1);
-}
-
-.rarity-legendary {
-  color: #b8860b;
-  background: rgba(184, 134, 11, 0.12);
-}
-
-.cell-views {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  color: var(--color-text-secondary);
-  font-size: 13px;
-  vertical-align: middle;
 }
 
 .status-tag {
@@ -777,6 +711,12 @@ onMounted(loadData)
   padding: 24px !important;
 }
 
+.empty-tip {
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+}
+
 /* ── 图标按钮 ────────────────────────────────────────────── */
 .icon-btn {
   display: inline-flex;
@@ -798,9 +738,19 @@ onMounted(loadData)
   color: var(--color-primary);
 }
 
-.icon-btn.danger:hover {
-  background: rgba(229, 57, 53, 0.08);
-  color: #c62828;
+.icon-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.icon-btn:disabled:hover {
+  background: transparent;
+  color: var(--color-text-secondary);
+}
+
+.form-tip {
+  font-size: 12px;
+  color: var(--color-primary);
 }
 
 /* ── 分页 ────────────────────────────────────────────────── */
@@ -835,7 +785,7 @@ onMounted(loadData)
 }
 
 .modal-card {
-  width: 440px;
+  width: 480px;
   max-width: calc(100vw - 40px);
   max-height: calc(100vh - 80px);
   overflow-y: auto;
@@ -843,10 +793,6 @@ onMounted(loadData)
   background: var(--color-surface);
   border-radius: 14px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-}
-
-.modal-card.wide {
-  width: 560px;
 }
 
 .modal-header {
@@ -889,7 +835,6 @@ onMounted(loadData)
 }
 
 .form-field input,
-.form-field textarea,
 .form-field select {
   width: 100%;
   padding: 9px 12px;
@@ -904,7 +849,6 @@ onMounted(loadData)
 }
 
 .form-field input:focus,
-.form-field textarea:focus,
 .form-field select:focus {
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px rgba(139, 30, 63, 0.1);
@@ -922,66 +866,14 @@ onMounted(loadData)
   margin-top: 8px;
 }
 
-/* ── 图片上传 ────────────────────────────────────────────── */
-.upload-box {
-  position: relative;
-  width: 100%;
-  height: 150px;
-  border: 1.5px dashed var(--color-border);
-  border-radius: var(--radius);
-  cursor: pointer;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: border-color 0.2s;
-}
-
-.upload-box:hover {
-  border-color: var(--color-primary);
-}
-
-.upload-preview {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.upload-placeholder {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  color: var(--color-text-secondary);
-  font-size: 13px;
-}
-
-.upload-input {
-  display: none;
-}
-
-.upload-actions {
-  display: flex;
-  gap: 8px;
-}
-
-.uploading-tip {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 12px;
-  color: var(--color-text-secondary);
-  margin: 0;
-}
-
 /* ── 响应式 ──────────────────────────────────────────────── */
 @media (max-width: 860px) {
   .table-wrap {
     overflow-x: auto;
   }
 
-  .item-table {
-    min-width: 760px;
+  .user-table {
+    min-width: 720px;
   }
 
   .form-row {
