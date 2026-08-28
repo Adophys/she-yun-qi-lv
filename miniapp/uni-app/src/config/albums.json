@@ -1,0 +1,56 @@
+[
+  {
+    "id": "id形象-少女-1",
+    "name": "ID形象-少女",
+    "image": "/static/albums/ID形象-少女.jpg",
+    "category": "craft",
+    "rarity": "common",
+    "isDiscovered": true,
+    "pieces": 9
+  },
+  {
+    "id": "乌米饭-2",
+    "name": "乌米饭",
+    "image": "/static/albums/乌米饭.jpg",
+    "category": "craft",
+    "rarity": "common",
+    "isDiscovered": true,
+    "pieces": 9
+  },
+  {
+    "id": "凤凰装-3",
+    "name": "凤凰装",
+    "image": "/static/albums/凤凰装.jpg",
+    "category": "craft",
+    "rarity": "common",
+    "isDiscovered": true,
+    "pieces": 9
+  },
+  {
+    "id": "畲绣-4",
+    "name": "畲绣",
+    "image": "/static/albums/畲绣.jpg",
+    "category": "craft",
+    "rarity": "common",
+    "isDiscovered": true,
+    "pieces": 9
+  },
+  {
+    "id": "花斗笠-5",
+    "name": "花斗笠",
+    "image": "/static/albums/花斗笠.jpeg",
+    "category": "craft",
+    "rarity": "common",
+    "isDiscovered": true,
+    "pieces": 9
+  },
+  {
+    "id": "项链-6",
+    "name": "项链",
+    "image": "/static/albums/项链.jpg",
+    "category": "craft",
+    "rarity": "common",
+    "isDiscovered": true,
+    "pieces": 9
+  }
+]

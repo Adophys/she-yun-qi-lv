@@ -1,4 +1,4 @@
-import { LayoutDashboard, BookOpen, Map, User, Settings } from '@lucide/vue'
+import { LayoutDashboard, BookOpen, Map, User, Settings } from 'lucide-vue-next'
 
 export interface NavItem {
   name: string
