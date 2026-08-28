@@ -1300,6 +1300,19 @@ export function setupMockServer(server: ViteDevServer) {
     const [pathname, queryString = ''] = req.url.split('?')
     const query = Object.fromEntries(new URLSearchParams(queryString))
 
+    // 后端已实现的真实接口：放行到后端代理，不做 mock（保证管理端数据与小程序联动）
+    const REAL_BACKEND_PATTERNS = [
+      /^\/api\/v1\/admin\/auth\/login$/,
+      /^\/api\/v1\/admin\/auth\/me$/,
+      /^\/api\/v1\/admin\/dashboard(\/|$)/,
+      /^\/api\/v1\/admin\/cultural-items(\/|$)/,
+      /^\/api\/v1\/admin\/explore-nodes(\/|$)/,
+      /^\/api\/v1\/admin\/users(\/|$)/,
+    ]
+    if (REAL_BACKEND_PATTERNS.some((p) => p.test(pathname))) {
+      return next()
+    }
+
     // 匹配路由
     let matched: { route: MockRoute; params: Record<string, string> } | null = null
     for (const r of routes) {

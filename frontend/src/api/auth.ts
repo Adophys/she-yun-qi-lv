@@ -22,6 +22,8 @@ export interface UserInfo {
 
 export interface LoginResult {
   token: string
+  /** 后端契约返回的令牌字段（与 token 二选一） */
+  accessToken?: string
   refreshToken: string
   user: UserInfo
   expiresIn: number // 秒
@@ -101,15 +103,20 @@ export function isAuthenticated(): boolean {
  */
 export async function login(payload: LoginPayload): Promise<LoginResult> {
   const result = await post<Partial<LoginResult> | null>('/admin/auth/login', payload)
-  if (!result || !result.token) {
+  // 兼容两种契约：mock/旧前端用 token；后端契约用 accessToken
+  const rawToken = String(result?.token ?? result?.accessToken ?? '')
+  if (!rawToken) {
     throw new ApiError('LOGIN_FAILED', '登录响应缺少令牌，请检查后端登录接口')
   }
   const full: LoginResult = {
-    token: String(result.token),
-    refreshToken: result.refreshToken == null ? '' : String(result.refreshToken),
+    token: rawToken,
+    refreshToken:
+      result?.refreshToken == null ? '' : String(result.refreshToken),
     expiresIn:
-      typeof result.expiresIn === 'number' && Number.isFinite(result.expiresIn) ? result.expiresIn : 0,
-    user: normalizeUser(result.user),
+      typeof result?.expiresIn === 'number' && Number.isFinite(result.expiresIn)
+        ? result.expiresIn
+        : 0,
+    user: normalizeUser(result?.user),
   }
   saveAuth(full)
   return full
