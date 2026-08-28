@@ -1,14 +1,14 @@
 <template>
-  <div class="items-view">
+  <div class="products-view">
     <!-- 页头 -->
     <div class="page-header">
       <div>
-        <h2>文化图鉴</h2>
-        <p class="page-desc">管理小程序中展示的畲族文化条目</p>
+        <h2>商品管理</h2>
+        <p class="page-desc">管理商城在售的畲族文创商品</p>
       </div>
       <button class="btn btn-primary" :disabled="loading" @click="openModal('create')">
         <Plus :size="16" />
-        新增条目
+        新增商品
       </button>
     </div>
 
@@ -18,23 +18,17 @@
         v-model="filters.keyword"
         type="text"
         class="filter-input search-input"
-        placeholder="搜索名称 / 拼音"
+        placeholder="搜索名称 / 分类"
         @keyup.enter="search"
       />
       <select v-model="filters.category" class="filter-input">
         <option value="">全部分类</option>
         <option v-for="c in categoryOptions" :key="c" :value="c">{{ c }}</option>
       </select>
-      <select v-model="filters.rarity" class="filter-input">
-        <option value="">全部稀有度</option>
-        <option v-for="(label, value) in CULTURAL_RARITIES" :key="value" :value="value">
-          {{ label }}
-        </option>
-      </select>
       <select v-model="filters.status" class="filter-input">
         <option value="">全部状态</option>
-        <option value="published">已上架</option>
-        <option value="draft">已下架</option>
+        <option value="active">已上架</option>
+        <option value="inactive">已下架</option>
       </select>
       <button class="btn btn-primary btn-sm" @click="search">
         <Search :size="14" />
@@ -63,68 +57,68 @@
       <table class="item-table">
         <thead>
           <tr>
-            <th>图鉴</th>
+            <th>商品</th>
             <th>名称</th>
             <th>分类</th>
-            <th>稀有度</th>
-            <th>浏览量</th>
+            <th>售价</th>
+            <th>库存</th>
+            <th>销量</th>
             <th>状态</th>
             <th>创建时间</th>
             <th class="col-actions">操作</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in items" :key="item.id">
+          <tr v-for="product in products" :key="product.id">
             <td>
-              <img :src="item.image" class="thumb" alt="" />
+              <img :src="product.image" class="thumb" alt="" />
             </td>
             <td>
-              <div class="cell-name">{{ item.name }}</div>
-              <div class="cell-pinyin">{{ item.pinyin || '—' }}</div>
+              <div class="cell-name">{{ product.name }}</div>
+              <div class="cell-pinyin">{{ product.description || '—' }}</div>
             </td>
             <td>
-              <span class="chip chip-category">{{ item.category }}</span>
+              <span class="chip chip-category">{{ product.category }}</span>
             </td>
             <td>
-              <span class="chip rarity" :class="`rarity-${item.rarity}`">
-                {{ rarityText(item.rarity) }}
+              <div class="cell-price">{{ formatPrice(product.price) }}</div>
+              <div v-if="product.originalPrice > product.price" class="cell-origin">
+                <del>{{ formatPrice(product.originalPrice) }}</del>
+              </div>
+            </td>
+            <td>
+              <span :class="['stock-num', product.stock <= 10 ? 'stock-low' : '']">
+                {{ product.stock.toLocaleString() }}
               </span>
             </td>
+            <td class="cell-sales">{{ product.sales.toLocaleString() }}</td>
             <td>
-              <span class="cell-views">
-                <Eye :size="14" />
-                {{ item.viewCount.toLocaleString() }}
+              <span class="status-tag" :class="product.isActive ? 'on' : 'off'">
+                {{ product.isActive ? '已上架' : '已下架' }}
               </span>
             </td>
-            <td>
-              <span class="status-tag" :class="item.isPublished ? 'on' : 'off'">
-                {{ item.isPublished ? '已上架' : '已下架' }}
-              </span>
-            </td>
-            <td class="cell-time">{{ formatDate(item.createdAt) }}</td>
+            <td class="cell-time">{{ formatDate(product.createdAt) }}</td>
             <td>
               <div class="row-actions">
                 <button
                   class="icon-btn"
-                  :title="item.isPublished ? '下架' : '上架'"
-                  @click="toggleStatus(item)"
+                  :title="product.isActive ? '下架' : '上架'"
+                  @click="toggleStatus(product)"
                 >
-                  <component :is="item.isPublished ? EyeOff : Eye" :size="15" />
+                  <component :is="product.isActive ? EyeOff : Eye" :size="15" />
                 </button>
-                <button class="icon-btn" title="编辑" @click="openModal('edit', item)">
+                <button class="icon-btn" title="编辑" @click="openModal('edit', product)">
                   <Pencil :size="15" />
                 </button>
-                <button class="icon-btn danger" title="删除" @click="removeItem(item)">
+                <button class="icon-btn danger" title="删除" @click="removeProduct(product)">
                   <Trash2 :size="15" />
                 </button>
               </div>
             </td>
           </tr>
-          <tr v-if="items.length === 0">
-            <td colspan="8" class="empty-cell">
-              <div class="empty-tip">
-                暂无匹配的图鉴条目，试试调整筛选条件
-              </div>
+          <tr v-if="products.length === 0">
+            <td colspan="9" class="empty-cell">
+              <div class="empty-tip">暂无匹配的商品，试试调整筛选条件</div>
             </td>
           </tr>
         </tbody>
@@ -167,47 +161,43 @@
         <form class="modal-form" @submit.prevent="submitForm">
           <div class="form-row">
             <div class="form-field">
-              <label>名称 <em>*</em></label>
-              <input v-model="form.name" type="text" placeholder="例如：凤凰装" required />
+              <label>商品名称 <em>*</em></label>
+              <input v-model="form.name" type="text" placeholder="例如：凤凰装刺绣丝巾" required />
             </div>
-            <div class="form-field">
-              <label>拼音</label>
-              <input v-model="form.pinyin" type="text" placeholder="例如：fenghuangzhuang" />
-            </div>
-          </div>
-
-          <div class="form-row">
             <div class="form-field">
               <label>分类 <em>*</em></label>
               <input
                 v-model="form.category"
                 type="text"
-                list="category-options"
+                list="product-category-options"
                 placeholder="选择或输入分类"
                 required
               />
-              <datalist id="category-options">
+              <datalist id="product-category-options">
                 <option v-for="c in categoryOptions" :key="c" :value="c" />
               </datalist>
-            </div>
-            <div class="form-field">
-              <label>稀有度</label>
-              <select v-model="form.rarity">
-                <option v-for="(label, value) in CULTURAL_RARITIES" :key="value" :value="value">
-                  {{ label }}
-                </option>
-              </select>
             </div>
           </div>
 
           <div class="form-row">
             <div class="form-field">
-              <label>地区</label>
-              <input v-model="form.origin" type="text" placeholder="例如：福建宁德" />
+              <label>售价（元）<em>*</em></label>
+              <input v-model.number="form.price" type="number" min="0" step="0.01" placeholder="0.00" required />
+            </div>
+            <div class="form-field">
+              <label>划线原价（元）</label>
+              <input v-model.number="form.originalPrice" type="number" min="0" step="0.01" placeholder="0.00" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-field">
+              <label>库存 <em>*</em></label>
+              <input v-model.number="form.stock" type="number" min="0" step="1" placeholder="0" required />
             </div>
             <div class="form-field">
               <label>状态</label>
-              <select v-model="form.isPublished">
+              <select v-model="form.isActive">
                 <option :value="true">上架</option>
                 <option :value="false">下架</option>
               </select>
@@ -218,8 +208,8 @@
             <label>描述</label>
             <textarea
               v-model="form.description"
-              rows="3"
-              placeholder="简要描述该文化条目的背景与特色"
+              rows="2"
+              placeholder="简要描述商品材质、工艺与特色"
             ></textarea>
           </div>
 
@@ -265,15 +255,14 @@
 import { computed, onMounted, reactive, ref } from 'vue'
 import { Plus, Pencil, Trash2, X, Eye, EyeOff, Search, RotateCcw, Upload } from 'lucide-vue-next'
 import {
-  getItems,
-  createItem,
-  updateItem,
-  toggleItemStatus,
-  deleteItem,
-  uploadImage,
-} from '@/api/culturalItems'
-import type { CulturalItem, CulturalItemPayload } from '@/types/admin'
-import { CULTURAL_RARITIES } from '@/types/admin'
+  getProducts,
+  createProduct,
+  updateProduct,
+  toggleProductStatus,
+  deleteProduct,
+} from '@/api/products'
+import { uploadImage } from '@/api/culturalItems'
+import type { Product, ProductPayload } from '@/types/admin'
 
 // ── 常量 ───────────────────────────────────────────────────────
 
@@ -284,7 +273,7 @@ const PAGE_SIZE = 8
 const loading = ref(true)
 const loadError = ref('')
 
-const items = ref<CulturalItem[]>([])
+const products = ref<Product[]>([])
 const total = ref(0)
 const page = ref(1)
 const totalPages = computed(() => Math.max(1, Math.ceil(total.value / PAGE_SIZE)))
@@ -295,15 +284,14 @@ const totalPages = computed(() => Math.max(1, Math.ceil(total.value / PAGE_SIZE)
  * 对接后端后自动跟随真实分类，无需改动页面代码。
  */
 const categoryOptions = computed<string[]>(() => {
-  return Array.from(new Set(items.value.map((i) => i.category).filter(Boolean)))
+  return Array.from(new Set(products.value.map((p) => p.category).filter(Boolean)))
 })
 
 /** 筛选条件（触发查询时同步到请求） */
 const filters = reactive({
   keyword: '',
   category: '',
-  rarity: '',
-  status: '' as '' | 'published' | 'draft',
+  status: '' as '' | 'active' | 'inactive',
 })
 
 // ── 模态框 ─────────────────────────────────────────────────────
@@ -318,13 +306,13 @@ const modal = reactive({
 const form = reactive({
   id: '',
   name: '',
-  pinyin: '',
   category: '',
-  rarity: 'common',
-  origin: '',
+  price: 0,
+  originalPrice: 0,
+  stock: 0,
   description: '',
   image: '',
-  isPublished: false,
+  isActive: false,
 })
 
 const fileInput = ref<HTMLInputElement | null>(null)
@@ -336,19 +324,18 @@ async function loadData() {
   loading.value = true
   loadError.value = ''
   try {
-    const result = await getItems({
+    const result = await getProducts({
       page: page.value,
       pageSize: PAGE_SIZE,
       keyword: filters.keyword.trim() || undefined,
       category: filters.category || undefined,
-      rarity: filters.rarity || undefined,
       status: filters.status || undefined,
     })
-    items.value = result.items
+    products.value = result.items
     total.value = result.total
   } catch (error) {
-    loadError.value = error instanceof Error ? error.message : '图鉴数据加载失败'
-    console.error('[CulturalItems] 加载失败 →', error)
+    loadError.value = error instanceof Error ? error.message : '商品数据加载失败'
+    console.error('[Products] 加载失败 →', error)
   } finally {
     loading.value = false
   }
@@ -363,7 +350,6 @@ function search() {
 function resetFilters() {
   filters.keyword = ''
   filters.category = ''
-  filters.rarity = ''
   filters.status = ''
   search()
 }
@@ -376,19 +362,19 @@ function changePage(target: number) {
 
 // ── 新增 / 编辑 ────────────────────────────────────────────────
 
-function openModal(mode: 'create' | 'edit', item?: CulturalItem) {
+function openModal(mode: 'create' | 'edit', item?: Product) {
   form.id = item?.id ?? ''
   form.name = item?.name ?? ''
-  form.pinyin = item?.pinyin ?? ''
   form.category = item?.category ?? ''
-  form.rarity = item?.rarity ?? 'common'
-  form.origin = item?.origin ?? ''
+  form.price = item?.price ?? 0
+  form.originalPrice = item?.originalPrice ?? 0
+  form.stock = item?.stock ?? 0
   form.description = item?.description ?? ''
   form.image = item?.image ?? ''
-  form.isPublished = item?.isPublished ?? false
+  form.isActive = item?.isActive ?? false
 
   modal.mode = mode
-  modal.title = mode === 'create' ? '新增图鉴条目' : '编辑图鉴条目'
+  modal.title = mode === 'create' ? '新增商品' : '编辑商品'
   modal.visible = true
 }
 
@@ -396,25 +382,25 @@ async function submitForm() {
   if (!form.name.trim() || !form.category.trim()) return
   modal.saving = true
   try {
-    const payload: CulturalItemPayload = {
+    const payload: ProductPayload = {
       name: form.name.trim(),
-      pinyin: form.pinyin.trim(),
       category: form.category.trim(),
-      rarity: form.rarity,
-      origin: form.origin.trim(),
-      description: form.description.trim(),
+      price: form.price,
+      originalPrice: form.originalPrice || form.price,
+      stock: form.stock,
       image: form.image,
-      isPublished: form.isPublished,
+      description: form.description.trim(),
+      isActive: form.isActive,
     }
     if (modal.mode === 'create') {
-      await createItem(payload)
+      await createProduct(payload)
     } else {
-      await updateItem(form.id, payload)
+      await updateProduct(form.id, payload)
     }
     closeModal()
     await loadData()
   } catch (error) {
-    console.error('[CulturalItems] 保存失败 →', error)
+    console.error('[Products] 保存失败 →', error)
   } finally {
     modal.saving = false
   }
@@ -422,26 +408,26 @@ async function submitForm() {
 
 // ── 上下架 / 删除 ──────────────────────────────────────────────
 
-async function toggleStatus(item: CulturalItem) {
+async function toggleStatus(product: Product) {
   try {
-    await toggleItemStatus(item.id, !item.isPublished)
-    item.isPublished = !item.isPublished
+    await toggleProductStatus(product.id, !product.isActive)
+    product.isActive = !product.isActive
   } catch (error) {
-    console.error('[CulturalItems] 切换状态失败 →', error)
+    console.error('[Products] 切换状态失败 →', error)
   }
 }
 
-async function removeItem(item: CulturalItem) {
-  if (!window.confirm(`确定删除「${item.name}」吗？此操作不可恢复！`)) return
+async function removeProduct(product: Product) {
+  if (!window.confirm(`确定删除「${product.name}」吗？此操作不可恢复！`)) return
   try {
-    await deleteItem(item.id)
+    await deleteProduct(product.id)
     // 当前页删空则回退一页
-    if (items.value.length === 1 && page.value > 1) {
+    if (products.value.length === 1 && page.value > 1) {
       page.value -= 1
     }
     await loadData()
   } catch (error) {
-    console.error('[CulturalItems] 删除失败 →', error)
+    console.error('[Products] 删除失败 →', error)
   }
 }
 
@@ -471,7 +457,7 @@ async function handleFileChange(event: Event) {
     const result = await uploadImage(file)
     form.image = result.url
   } catch (error) {
-    console.error('[CulturalItems] 上传失败 →', error)
+    console.error('[Products] 上传失败 →', error)
     window.alert(error instanceof Error ? error.message : '图片上传失败')
   } finally {
     uploading.value = false
@@ -480,9 +466,8 @@ async function handleFileChange(event: Event) {
 
 // ── 展示工具 ───────────────────────────────────────────────────
 
-/** 稀有度文案：从类型契约层取，未知值兜底显示原始值 */
-function rarityText(rarity: string): string {
-  return CULTURAL_RARITIES[rarity] ?? rarity
+function formatPrice(value: number): string {
+  return `¥${value.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 }
 
 function formatDate(iso: string): string {
@@ -526,7 +511,7 @@ onMounted(loadData)
   color: var(--color-text-secondary);
 }
 
-/* ── 通用按钮（与章节页一致） ───────────────────────────── */
+/* ── 通用按钮（与图鉴/点位页一致） ──────────────────────── */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -707,6 +692,10 @@ onMounted(loadData)
 .cell-pinyin {
   font-size: 11px;
   color: var(--color-text-secondary);
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .chip {
@@ -722,28 +711,28 @@ onMounted(loadData)
   background: rgba(139, 30, 63, 0.08);
 }
 
-.rarity-common {
-  color: #616161;
-  background: rgba(97, 97, 97, 0.1);
+.cell-price {
+  font-weight: 600;
+  color: #c62828;
+  white-space: nowrap;
 }
 
-.rarity-rare {
-  color: #1565c0;
-  background: rgba(21, 101, 192, 0.1);
-}
-
-.rarity-legendary {
-  color: #b8860b;
-  background: rgba(184, 134, 11, 0.12);
-}
-
-.cell-views {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
+.cell-origin {
+  font-size: 11px;
   color: var(--color-text-secondary);
-  font-size: 13px;
-  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.stock-num {
+  font-weight: 500;
+}
+
+.stock-num.stock-low {
+  color: #e65100;
+}
+
+.cell-sales {
+  color: var(--color-text-secondary);
 }
 
 .status-tag {
@@ -981,7 +970,7 @@ onMounted(loadData)
   }
 
   .item-table {
-    min-width: 760px;
+    min-width: 880px;
   }
 
   .form-row {
